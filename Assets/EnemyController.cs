@@ -2,23 +2,24 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public float speed = 2f;
-    private Vector3 moveDirection;
+    public float speed = 1.0f;
+    public float health = 100f;
 
-    // 스폰 시 플레이어 위치 기준 방향 설정
-    public void SetInitialDirection(Vector3 playerPosition)
+    private Transform target;
+
+    public void SetTarget(Transform targetTransform)
     {
-        moveDirection = (playerPosition - transform.position).normalized;
+        target = targetTransform;
     }
 
-    private void Update()
+    void Update()
     {
-        if (GameManager.Instance.isGameOver) return;
+        if (target == null) return;
 
-        transform.position += moveDirection * speed * Time.deltaTime;
+        Vector3 dir = (target.position - transform.position).normalized;
+        transform.position += dir * speed * Time.deltaTime;
 
-        // 이동 방향으로 회전 (선택사항)
-        if (moveDirection != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(moveDirection);
+        if (dir != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(dir);
     }
 }

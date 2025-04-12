@@ -14272,6 +14272,57 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.018024981, y: 1.8356786, z: 0.071110904}
     m_Extent: {x: 1.6483657, y: 1.9940042, z: 1.1233299}
   m_DirtyAABB: 0
+--- !u!1 &498129770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 498129772}
+  - component: {fileID: 498129771}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &498129771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498129770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b17ccadf7feea7e4ab22e609c132651b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minX: -5
+  maxX: 5
+  minZ: -5
+  maxZ: 5
+  planeMin: {x: -5, y: -5}
+  planeMax: {x: 5, y: 5}
+  isGameOver: 0
+--- !u!4 &498129772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498129770}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.1272824, y: 0.6243821, z: 4.8235435}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &498821867
 GameObject:
   m_ObjectHideFlags: 0
@@ -32272,6 +32323,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e75d52ec96a8f1749b5fec13b069f339, type: 3}
+--- !u!4 &1077151445 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e75d52ec96a8f1749b5fec13b069f339, type: 3}
+  m_PrefabInstance: {fileID: 1077151444}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1078721058
 GameObject:
   m_ObjectHideFlags: 0
@@ -46373,6 +46429,67 @@ Transform:
   m_Children:
   - {fileID: 1639185255}
   m_Father: {fileID: 863085157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1601393267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1601393270}
+  - component: {fileID: 1601393269}
+  - component: {fileID: 1601393268}
+  m_Layer: 0
+  m_Name: Enemy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1601393268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601393267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827a39a8c651fa64599803aabfe6789c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 2001917222}
+  enemyCount: 5
+  player: {fileID: 1077151445}
+--- !u!114 &1601393269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601393267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87dc23fc726d5814a94f31bef080f912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+--- !u!4 &1601393270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601393267}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.1272824, y: 0.6243821, z: 4.8235435}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1604070554
 GameObject:
@@ -60648,3 +60765,5 @@ SceneRoots:
   - {fileID: 1312420026}
   - {fileID: 711065683}
   - {fileID: 1077151444}
+  - {fileID: 1601393270}
+  - {fileID: 498129772}

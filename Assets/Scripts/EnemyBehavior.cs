@@ -6,7 +6,7 @@ public class EnemyBehavior : MonoBehaviour
     private Vector3 moveDirection;
 
     // 스폰 시 플레이어 위치 기준 방향 설정
-    public void SetInitialDirection(Vector3 playerPosition)
+    public void initDir(Vector3 playerPosition)
     {
         moveDirection = (playerPosition - transform.position).normalized;
     }

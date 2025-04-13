@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour
             Vector3 spawnPos = new Vector3(x, 0f, z);
 
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-            enemy.GetComponent<EnemyBehavior>().SetInitialDirection(player.position);
+            enemy.GetComponent<EnemyBehavior>().initDir(player.position);
         }
     }
 }

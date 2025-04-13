@@ -1,41 +1,28 @@
 ﻿using UnityEngine;
-using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
-public class PlayerTracker : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public Spawner spawner;
-    public FieldPlacer fieldPlacer;
+    private GameObject player;
 
-    private bool isGameStarted = false;
-    private ARTrackedImageManager imageManager;
+    private float speed = 0.05f;
 
-    void Awake()
+    private void Start()
     {
-        imageManager = GetComponent<ARTrackedImageManager>();
+        if (playerPrefab != null)
+        {
+            player = Instantiate(playerPrefab, transform.position, transform.rotation);
+        }
     }
 
-    void Update()
+    private void Update()
     {
-        if (isGameStarted) return;
-        if (imageManager == null || fieldPlacer == null || spawner == null) return;
-
-        GameObject field = fieldPlacer.GetSpawnedField();
-        if (field == null) return;
-
-        foreach (var trackedImage in imageManager.trackables)
+        if (player != null)
         {
-            if (trackedImage.trackingState == TrackingState.Tracking &&
-                trackedImage.referenceImage.name == "player-marker")
-            {
-                Vector3 spawnPos = trackedImage.transform.position;
-                GameObject player = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-                isGameStarted = true;
+            player.transform.LookAt(transform);
 
-                spawner.StartSpawning(player.transform);
-                break;
-            }
+            Vector3 moveDirection = (transform.position - player.transform.position).normalized;
+            player.transform.position += moveDirection * speed * Time.deltaTime;
         }
     }
 }

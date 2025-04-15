@@ -9,9 +9,20 @@ public class PlayerController : MonoBehaviour
     public float health = 100.0f;
 
     private Animator animator;
-    private bool isMoving = false;  // idle 상태 전환용
-    private bool isWalking = false; // walk speed == 1.0f
-    private bool isFlying = false;  // fly  speed == 1.2f
+    private bool isMoving = false;
+    private bool isWalking = false;
+    private bool isFlying = false;
+    private bool isShouting = false;
+    private bool isDizzying = false;
+
+    int isWalkingHash;
+    int isFlyingHash;
+    int shoutTriggerHash;
+    int getHitTriggerHash;
+    int cheerTriggerHash;
+    int dizzyTriggerHash;
+    int panicTriggerHash;
+
 
     // 마커 위 PlayerPrefab 생성
     private void Start()
@@ -19,7 +30,14 @@ public class PlayerController : MonoBehaviour
         if (playerPrefab != null)
         {
             player = Instantiate(playerPrefab, transform.position, transform.rotation);
-            animator = GetComponent<Animator>();
+            animator = player.GetComponent<Animator>();
+            isWalkingHash = Animator.StringToHash("isWalking");
+            isFlyingHash = Animator.StringToHash("isFlying");
+            shoutTriggerHash = Animator.StringToHash("shout");
+            getHitTriggerHash = Animator.StringToHash("getHit");
+            cheerTriggerHash = Animator.StringToHash("cheer");
+            dizzyTriggerHash = Animator.StringToHash("dizzy");
+            panicTriggerHash = Animator.StringToHash("panic");
         }
     }
 
@@ -40,6 +58,10 @@ public class PlayerController : MonoBehaviour
             //else speed = 1.0f;
             speed = 0.1f;
             player.transform.position += moveDirection * speed * Time.deltaTime;
+
+
+            animator.SetBool(isWalkingHash, isWalking);
+            animator.SetBool(isFlyingHash, isFlying);
 
 
             // 감정별 눈 활성화/비활성화=====================================
@@ -89,63 +111,23 @@ public class PlayerController : MonoBehaviour
             player.transform.Find("rudy_eye_left").gameObject.SetActive(isNormal);
             player.transform.Find("rudy_eye_right").gameObject.SetActive(isNormal);
 
-            ss
+
 
             // 애니메이션 구현========================================
+            if (Input.GetKeyDown(KeyCode.Space)) // shout
+                animator.SetTrigger(shoutTriggerHash);
 
-            // 아무런 움직임이 없다면 idle (isMoving = false)
-            if (!isMoving)
-            {
-                // idle 애니메이션 실행
-                // animator.SetBool(isIdleHash, true);
-            }
-            if (isMoving && moveDirection == Vector3.zero)
-            {
-                // idle 애니메이션 종료
-                // animator.SetBool(isIdleHash, false);
-            }
+            if (Input.GetKeyDown(KeyCode.G)) // getHit
+                animator.SetTrigger(getHitTriggerHash);
 
+            if (Input.GetKeyDown(KeyCode.C)) // cheer
+                animator.SetTrigger(cheerTriggerHash);
 
+            if (Input.GetKeyDown(KeyCode.D)) // dizzy
+                animator.SetTrigger(dizzyTriggerHash);
 
-            // 이동속도 1.0 pokpok (isMoving = true, isWalking = true)
-            if (!isWalking && moveDirection != Vector3.zero)
-            {
-                // pokpok 애니메이션 실행
-                // animator.SetBool(isWalkingHash, true);
-            }
-            if (isWalking && moveDirection == Vector3.zero)
-            {
-                // pokpok 애니메이션 종료
-                // animator.SetBool(isWalkingHash, false);
-            }
-
-
-
-            // 이동속도 1.5 fly (isMoving = true, isFlying = true)
-            if (!isFlying && moveDirection != Vector3.zero)
-            {
-                // fly 애니메이션 실행
-                // animator.SetBool(isFlyingHash, true);
-            }
-            if (isFlying && moveDirection == Vector3.zero)
-            {
-                // fly 애니메이션 종료
-                // animator.SetBool(isFlyingHash, false);
-            }
-
-
-
-            // 공격시 shout (isMoving = true, shout trigger)
-
-            // 체력 감소시 getHit (isMoving = true, getHit trigger)
-
-            // 게임 승리시 cheer (isMoving = true, cheer trigger)
-
-            // 게임 패배시 dizzy (isMoving = true, dizzy trigger)
-
-            // 기타 아이템 획득시 panic (isMoving = true, panic trigger)
-
-
+            if (Input.GetKeyDown(KeyCode.P)) // panic
+                animator.SetTrigger(panicTriggerHash);
         }
     }
 }

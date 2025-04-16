@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd607c3f010ab45a29ecfcf8d5a898ef, type: 3}
   m_Name: Settings
   m_EditorClassIdentifier: 
-  ARCompanionAppIP: 192.168.0.6
+  ARCompanionAppIP: 172.20.10.3
   arCompanionSettings:
     cameraVideoSettings:
       enableVideo: 1
@@ -81,6 +81,7 @@ MonoBehaviour:
       e33: 1
     overrideProjectionMatrix: 0
     projectionMatrix:
+<<<<<<< Updated upstream
       e00: 3.2367303
       e01: 0
       e02: 0.011768253
@@ -88,6 +89,15 @@ MonoBehaviour:
       e10: 0
       e11: 1.5746256
       e12: 0.0064703636
+=======
+      e00: 3.232392
+      e01: 0
+      e02: 0.019011637
+      e03: 0
+      e10: 0
+      e11: 1.572515
+      e12: 0.017280882
+>>>>>>> Stashed changes
       e13: 0
       e20: 0
       e21: 0

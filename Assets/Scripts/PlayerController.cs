@@ -9,9 +9,26 @@ public class PlayerController : MonoBehaviour
     public float health = 100.0f;
 
     private Animator animator;
+<<<<<<< HEAD
     private bool isMoving = false;  // idle 상태 전환용
     private bool isWalking = false; // walk speed == 1.0f
     private bool isFlying = false;  // fly  speed == 1.2f
+=======
+    private bool isMoving = false;
+    private bool isWalking = false;
+    private bool isFlying = false;
+    private bool isShouting = false;
+    private bool isDizzying = false;
+
+    int isWalkingHash;
+    int isFlyingHash;
+    int shoutTriggerHash;
+    int getHitTriggerHash;
+    int cheerTriggerHash;
+    int dizzyTriggerHash;
+    int panicTriggerHash;
+
+>>>>>>> main
 
     // 마커 위 PlayerPrefab 생성
     private void Start()
@@ -19,7 +36,18 @@ public class PlayerController : MonoBehaviour
         if (playerPrefab != null)
         {
             player = Instantiate(playerPrefab, transform.position, transform.rotation);
+<<<<<<< HEAD
             animator = GetComponent<Animator>();
+=======
+            animator = player.GetComponent<Animator>();
+            isWalkingHash = Animator.StringToHash("isWalking");
+            isFlyingHash = Animator.StringToHash("isFlying");
+            shoutTriggerHash = Animator.StringToHash("shout");
+            getHitTriggerHash = Animator.StringToHash("getHit");
+            cheerTriggerHash = Animator.StringToHash("cheer");
+            dizzyTriggerHash = Animator.StringToHash("dizzy");
+            panicTriggerHash = Animator.StringToHash("panic");
+>>>>>>> main
         }
     }
 
@@ -42,6 +70,13 @@ public class PlayerController : MonoBehaviour
             player.transform.position += moveDirection * speed * Time.deltaTime;
 
 
+<<<<<<< HEAD
+=======
+            animator.SetBool(isWalkingHash, isWalking);
+            animator.SetBool(isFlyingHash, isFlying);
+
+
+>>>>>>> main
             // 감정별 눈 활성화/비활성화=====================================
             bool isNormal = true;
             bool isAngry = false;
@@ -89,6 +124,7 @@ public class PlayerController : MonoBehaviour
             player.transform.Find("rudy_eye_left").gameObject.SetActive(isNormal);
             player.transform.Find("rudy_eye_right").gameObject.SetActive(isNormal);
 
+<<<<<<< HEAD
             
 
             // 애니메이션 구현========================================
@@ -146,6 +182,25 @@ public class PlayerController : MonoBehaviour
             // 기타 아이템 획득시 panic (isMoving = true, panic trigger)
 
 
+=======
+
+
+            // 애니메이션 구현========================================
+            if (Input.GetKeyDown(KeyCode.Space)) // shout
+                animator.SetTrigger(shoutTriggerHash);
+
+            if (Input.GetKeyDown(KeyCode.G)) // getHit
+                animator.SetTrigger(getHitTriggerHash);
+
+            if (Input.GetKeyDown(KeyCode.C)) // cheer
+                animator.SetTrigger(cheerTriggerHash);
+
+            if (Input.GetKeyDown(KeyCode.D)) // dizzy
+                animator.SetTrigger(dizzyTriggerHash);
+
+            if (Input.GetKeyDown(KeyCode.P)) // panic
+                animator.SetTrigger(panicTriggerHash);
+>>>>>>> main
         }
     }
 }

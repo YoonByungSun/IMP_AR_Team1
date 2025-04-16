@@ -4,10 +4,12 @@ public class Spawner : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public int enemyCount = 5;
-    public Transform player;
 
-    void Start()
+    private Transform player;
+
+    public void StartSpawning(Transform playerTransform)
     {
+        player = playerTransform;
         SpawnEnemies();
     }
 
@@ -20,7 +22,7 @@ public class Spawner : MonoBehaviour
             Vector3 spawnPos = new Vector3(x, 0f, z);
 
             GameObject enemy = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
-            enemy.GetComponent<EnemyController>().SetInitialDirection(player.position);
+            enemy.GetComponent<EnemyBehavior>().initDir(player.position);
         }
     }
 }

@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         {
             player = Instantiate(playerPrefab, transform.position, transform.rotation);
             animator = player.GetComponent<Animator>();
-            isWalkingHash = Animator.StringToHash("isWalking");
+            //isWalkingHash = Animator.StringToHash("isWalking");
             isFlyingHash = Animator.StringToHash("isFlying");
             shoutTriggerHash = Animator.StringToHash("shout");
             getHitTriggerHash = Animator.StringToHash("getHit");
@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
             player.transform.position += moveDirection * speed * Time.deltaTime;
 
 
-            animator.SetBool(isWalkingHash, isWalking);
+            //animator.SetBool(isWalkingHash, isWalking);
             animator.SetBool(isFlyingHash, isFlying);
 
 

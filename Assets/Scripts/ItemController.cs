@@ -11,17 +11,23 @@ public class ItemController : MonoBehaviour
         public GameObject prefab;
     }
 
-    public List<ItemData> itemList;           // 스폰할 수 있는 아이템 목록
-    private float spawnIntervalMin = 1.5f;       // 최소 스폰 시간
-    private float spawnIntervalMax = 5f;       // 최대 스폰 시간
-    private float spawnRadius = 5.0f;          // 플레이어 기준 스폰 반경
+    [Header("스폰 설정")]
+    public List<ItemData> itemList;           // 생성 가능한 아이템 프리팹들
+    public GameObject player;                 // 스폰 기준 위치 (플레이어)
+    public float spawnIntervalMin = 1.5f;
+    public float spawnIntervalMax = 5f;
+    public float spawnRadius = 5.0f;
+    public float minDistance = 1.5f;
 
-    //private Transform player;
-    public GameObject player;
+    [Header("개별 아이템 정보 (프리팹에 붙은 경우만)")]
+    public string itemName = "GenericItem";   // 인벤토리에 저장될 이름
 
-    void Start()
+    private void Start()
     {
-        Debug.Log(player.transform.position);
+        if (itemList.Count > 0 && player != null)
+        {
+            StartCoroutine(SpawnItemRoutine());
+        }
     }
 
     IEnumerator SpawnItemRoutine()
@@ -37,17 +43,53 @@ public class ItemController : MonoBehaviour
 
     void SpawnRandomItem()
     {
-        if (itemList.Count == 0 || player == null) return;
-
-        // 랜덤 아이템 선택
         ItemData selectedItem = itemList[Random.Range(0, itemList.Count)];
 
-        // 플레이어 주변 랜덤 위치 계산
-        Vector3 randomOffset = Random.onUnitSphere * spawnRadius;
-        randomOffset.y = 0f;
-        Vector3 spawnPos = player.transform.position + randomOffset;
+        const int maxAttempts = 10;
+        Vector3 spawnPos = Vector3.zero;
+        bool foundValid = false;
 
-        // 아이템 생성
-        Instantiate(selectedItem.prefab, spawnPos, Quaternion.identity, this.transform);
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            Vector3 offset = Random.onUnitSphere * spawnRadius;
+            offset.y = 0f;
+            spawnPos = player.transform.position + offset;
+
+            if (IsValidPosition(spawnPos))
+            {
+                foundValid = true;
+                break;
+            }
+        }
+
+        if (foundValid)
+        {
+            GameObject newItem = Instantiate(selectedItem.prefab, spawnPos, Quaternion.identity);
+            newItem.transform.parent = transform;
+        }
+    }
+
+    bool IsValidPosition(Vector3 pos)
+    {
+        foreach (ItemController item in FindObjectsOfType<ItemController>())
+        {
+            if (Vector3.Distance(item.transform.position, pos) < minDistance)
+                return false;
+        }
+        return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerController playerController = other.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.AddItem(itemName, this.gameObject);
+                Debug.Log(itemName + " 아이템 인벤토리에 추가됨");
+                Destroy(gameObject); // 실제 오브젝트는 제거
+            }
+        }
     }
 }

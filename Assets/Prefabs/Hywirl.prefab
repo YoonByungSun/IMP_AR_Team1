@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hywirl
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1f054186c91b13409025117df881caa, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 9087294952346762170, guid: f1f054186c91b13409025117df881caa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

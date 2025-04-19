@@ -26,19 +26,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.08
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.03
+      value: 0.0112
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.98317534
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.1826645
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalRotation.y
@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 21.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5477749408508380018, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.253
+      value: 2.85
       objectReference: {fileID: 0}
     - target: {fileID: -2577548232221058511, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalScale.z
@@ -74,11 +74,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2577548232221058511, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.98
+      value: -0.42299962
       objectReference: {fileID: 0}
     - target: {fileID: -2484921068739079471, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.148606
+      value: 2.7456062
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_Name
@@ -90,7 +90,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3316992658331686828, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.20196
+      value: 2.7989604
       objectReference: {fileID: 0}
     - target: {fileID: 7202271454713460447, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: Spray
-  rotateSpeed: 90
+  rotateSpeed: {x: 45, y: 90, z: 30}
 --- !u!114 &-5564637102451604207
 MonoBehaviour:
   m_ObjectHideFlags: 0

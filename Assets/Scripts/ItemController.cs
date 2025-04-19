@@ -58,7 +58,7 @@ public class ItemController : MonoBehaviour
 
         if (valid)
         {
-            GameObject obj = Instantiate(item.prefab, spawnPos, Quaternion.identity);
+            GameObject obj = Instantiate(item.prefab, spawnPos, Quaternion.Euler(0, 45, 0));
             obj.tag = "Item";
             obj.transform.parent = transform;
             ItemGeneric i = obj.GetComponent<ItemGeneric>();

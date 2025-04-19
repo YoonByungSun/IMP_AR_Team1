@@ -2,22 +2,23 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    public enum EnemyType { Mushnub, GreenBlob, AlienBlob }
+    public EnemyType enemyType;
     public float speed = 2f;
     private Vector3 moveDirection;
 
-    // 스폰 시 플레이어 위치 기준 방향 설정
     public void SetInitialDirection(Vector3 playerPosition)
     {
-        moveDirection = (playerPosition - transform.position).normalized;
+        Vector3 direction = playerPosition - transform.position;
+        direction.y = 0;
+        moveDirection = direction.normalized;
     }
 
-    private void Update()
+    void Update()
     {
-        if (GameManager.Instance.isGameOver) return;
+        if (GameManager.Instance != null && GameManager.Instance.isGameOver) return;
 
         transform.position += moveDirection * speed * Time.deltaTime;
-
-        // 이동 방향으로 회전 (선택사항)
         if (moveDirection != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(moveDirection);
     }

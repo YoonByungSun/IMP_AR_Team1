@@ -1,19 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[System.Serializable]
-public class InventoryItem
-{
-    public string itemName;
-    public GameObject itemPrefab;
-}
-
 public class PlayerController : MonoBehaviour
 {
     public GameObject playerPrefab;
     private GameObject player;
 
-    private List<InventoryItem> inventory = new List<InventoryItem>();
 
     private float speed;
     public float health = 100.0f;
@@ -134,10 +126,11 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.P)) // panic
                 animator.SetTrigger(panicTriggerHash);
 
-            // 터치로 인벤토리 첫 번째 아이템 사용 =========================
-            if (Input.touchCount > 0 &&
-                Input.GetTouch(0).phase == TouchPhase.Began &&
-                inventory.Count > 0)
+
+
+
+            // 아이템 사용 =====================================================
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && inventory.Count > 0)
             {
                 InventoryItem item = inventory[0];
                 inventory.RemoveAt(0);
@@ -149,20 +142,28 @@ public class PlayerController : MonoBehaviour
                     usable.Use(transform);
                 }
 
-                Destroy(temp); // 사용 후 제거
+                Destroy(temp);
             }
         }
     }
 
-    // 아이템 인벤토리에 추가
+
+
+    // 아이템 관련 코드 ========================================================
+    [System.Serializable]
+    public class InventoryItem
+    {
+        public string itemName;
+        public GameObject itemPrefab;
+    }
+
+    private List<InventoryItem> inventory = new List<InventoryItem>();
+
+    // 아이템 충돌 시 호출됨
     public void AddItem(string name, GameObject prefab)
     {
-        inventory.Add(new InventoryItem
-        {
-            itemName = name,
-            itemPrefab = prefab
-        });
-
-        Debug.Log("아이템 인벤토리에 저장됨: " + name);
+        inventory.Add(new InventoryItem { itemName = name, itemPrefab = prefab });
+        Debug.Log("New item added in inventory: " + name);
+        Debug.Log(inventory.Count + " items in inventory.");
     }
 }

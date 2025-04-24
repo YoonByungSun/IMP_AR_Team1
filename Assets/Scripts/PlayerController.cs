@@ -37,9 +37,9 @@ public class PlayerController : MonoBehaviour
 
                 case EnemyController.EnemyType.GreenBlob:
                     Debug.Log("🟢 GreenBlob과 충돌");
-                    if (scale >= 0.4f)
+                    if (scale >= 0.15f)
                     {
-                        ScaleUp(0.04f);
+                        ScaleUp(0.03f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -51,9 +51,9 @@ public class PlayerController : MonoBehaviour
 
                 case EnemyController.EnemyType.AlienBlob:
                     Debug.Log("👽 AlienBlob과 충돌");
-                    if (scale >= 0.6f)
+                    if (scale >= 0.3f)
                     {
-                        ScaleUp(0.08f);
+                        ScaleUp(0.04f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Boss"))
         {
-            if (scale >= 1f)
+            if (scale >= 0.5f)
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
@@ -100,14 +100,24 @@ public class PlayerController : MonoBehaviour
         Vector3 pos = transform.position;
         transform.position = new Vector3(pos.x, 0.1f, pos.z);
 
+        // ✅ 현재 스케일 저장 (PlayerData가 존재할 경우)
+        if (PlayerData.Instance != null)
+        {
+            PlayerData.Instance.savedScale = scale;
+            Debug.Log($"📌 PlayerData 저장됨: {scale}");
+        }
+
         // ✅ 스테이지 조건 유지
-        if (scale >= 0.4f && SceneManager.GetActiveScene().name == "Stage1")
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (scale >= 0.15f && currentScene == "Stage1")
             SceneManager.LoadScene("Stage2");
-        else if (scale >= 0.6f && SceneManager.GetActiveScene().name == "Stage2")
+        else if (scale >= 0.3f && currentScene == "Stage2")
             SceneManager.LoadScene("Stage3");
-        else if (scale >= 1f && SceneManager.GetActiveScene().name == "Stage3")
+        else if (scale >= 0.5f && currentScene == "Stage3")
             FindObjectOfType<EnemySpawner>()?.SpawnBosses();
     }
+
 
 
 
@@ -128,7 +138,7 @@ public class PlayerController : MonoBehaviour
 
     void DeactivateFkiller()
     {
-        isFkillerActive = false;
+        isFkillerActive = false;    
         if (fkillerEffect != null)
             fkillerEffect.SetActive(false);
     }

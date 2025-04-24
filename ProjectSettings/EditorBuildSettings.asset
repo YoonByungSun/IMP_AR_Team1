@@ -8,6 +8,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Stage1.unity
+    guid: 9e7ded305513bb5468ef4ae41d829847
+  - enabled: 1
+    path: Assets/Scenes/Stage2.unity
+    guid: 988d98afa3a2cb043b6fa80d84f8a804
+  - enabled: 1
+    path: Assets/Scenes/Stage3.unity
+    guid: 3427e7fe06a7c09408adc87bde020e3b
+  - enabled: 1
+    path: Assets/Scenes/GameOverScene.unity
+    guid: 5e0107b7a026bac48a4cfd6361728409
   m_configObjects:
     AR Foundation RemoteARFoundationRemoteLoaderSettings: {fileID: 11400000, guid: bc8204ec6a4f67342b226c6106192124, type: 2}
     AR Foundation RemoteARFoundationRemoteSessionRecordsData: {fileID: 11400000, guid: b12573798753c6d499f56ab867836d41, type: 2}

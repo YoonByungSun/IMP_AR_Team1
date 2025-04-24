@@ -302,7 +302,7 @@ Transform:
   m_GameObject: {fileID: 32289481}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.03404901, y: 1.5492918, z: -5.35}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -428,7 +428,7 @@ Transform:
   m_GameObject: {fileID: 521209876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -671,6 +671,50 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &583265686
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 583265688}
+  - component: {fileID: 583265687}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &583265687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583265686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fb3dc4bc6a37b4cb34845a5f20e7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &583265688
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583265686}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.09777198, y: -2.5555532, z: 2.8328826}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &774229220
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,6 +751,7 @@ MonoBehaviour:
   bossPrefab: {fileID: 8653476890410818828, guid: b7ca3c46e9a133a4ca900cb9a8c707d6, type: 3}
   roomTransform: {fileID: 157413381}
   spawnCount: 30
+  spawnMargin: 0.3
 --- !u!4 &774229223
 Transform:
   m_ObjectHideFlags: 0
@@ -748,7 +793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.42
+      value: -3.4199998
       objectReference: {fileID: 0}
     - target: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -764,11 +809,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -913,3 +958,4 @@ SceneRoots:
   - {fileID: 28187895}
   - {fileID: 1595443536}
   - {fileID: 912066236}
+  - {fileID: 583265688}

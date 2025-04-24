@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: 0.01
-  defaultScale: {x: 0.03, y: 0.03, z: 0.03}
+  defaultScale: {x: 0.01, y: 0.01, z: 0.01}
   fkillerEffect: {fileID: 0}
 --- !u!65 &8554374583769619582
 BoxCollider:

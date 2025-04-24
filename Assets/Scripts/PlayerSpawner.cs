@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
+using UnityEngine.SceneManagement;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -40,7 +41,19 @@ public class PlayerSpawner : MonoBehaviour
                 Vector3 spawnPos = new Vector3(markerPos.x, markerPos.y + 0.05f, markerPos.z);
 
                 spawnedPlayer = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-                spawnedPlayer.transform.localScale = defaultScale;
+                string currentScene= SceneManager.GetActiveScene().name;
+                float scaleFactor;
+                if(currentScene=="Stage1")
+                {
+                    scaleFactor = 0.03f;
+
+                }
+                else
+                {
+                    scaleFactor = PlayerData.Instance!= null ? PlayerData.Instance.savedScale : 0.03f;
+                }
+
+                    spawnedPlayer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);    
                 spawnedPlayer.tag = "Player";
 
                 Debug.Log("✅ 플레이어 생성 완료: " + spawnPos);

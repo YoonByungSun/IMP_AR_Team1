@@ -11,6 +11,20 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
     private int bossKillCount = 0;
     private GameObject spawnedPlayer;
+    void Start()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        // Stage1이 아닐 때만 저장된 스케일 적용
+        if (currentScene != "Stage1" && PlayerData.Instance != null)
+        {
+            scale = PlayerData.Instance.savedScale;
+            transform.localScale = new Vector3(scale, scale, scale);
+            Debug.Log($"📌 PlayerController: savedScale 적용됨 = {scale}");
+        }
+    }
+
+
 
     void OnTriggerEnter(Collider other)
     {
@@ -31,15 +45,15 @@ public class PlayerController : MonoBehaviour
             {
                 case EnemyController.EnemyType.Mushnub:
                     Debug.Log("✅ Mushnub과 충돌 → ScaleUp");
-                    ScaleUp(0.02f);
+                    ScaleUp(0.01f);
                     Destroy(other.gameObject);
                     break;
 
                 case EnemyController.EnemyType.GreenBlob:
                     Debug.Log("🟢 GreenBlob과 충돌");
-                    if (scale >= 0.15f)
+                    if (scale >= 0.06f)
                     {
-                        ScaleUp(0.03f);
+                        ScaleUp(0.02f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -51,9 +65,9 @@ public class PlayerController : MonoBehaviour
 
                 case EnemyController.EnemyType.AlienBlob:
                     Debug.Log("👽 AlienBlob과 충돌");
-                    if (scale >= 0.3f)
+                    if (scale >= 0.2f)
                     {
-                        ScaleUp(0.04f);
+                        ScaleUp(0.03f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -72,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Boss"))
         {
-            if (scale >= 0.5f)
+            if (scale >= 0.35f)
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
@@ -91,31 +105,25 @@ public class PlayerController : MonoBehaviour
 
     void ScaleUp(float amount)
     {
-        scale = Mathf.Min(scale + amount, 4.0f);
+        scale = Mathf.Min(scale + amount, 1.0f); // 최대 크기 제한은 네가 정하기 나름
 
-        // ✅ 현재 오브젝트의 스케일 증가
-        transform.localScale += new Vector3(amount, amount, amount);
+        transform.localScale = new Vector3(scale, scale, scale);  // 실제 크기로 적용
+        transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
 
-        // ✅ Y 위치 고정
-        Vector3 pos = transform.position;
-        transform.position = new Vector3(pos.x, 0.1f, pos.z);
-
-        // ✅ 현재 스케일 저장 (PlayerData가 존재할 경우)
+        // 저장
         if (PlayerData.Instance != null)
         {
             PlayerData.Instance.savedScale = scale;
-            Debug.Log($"📌 PlayerData 저장됨: {scale}");
+            Debug.Log($"✅ 스케일 저장됨: {scale}");
         }
 
-        // ✅ 스테이지 조건 유지
         string currentScene = SceneManager.GetActiveScene().name;
 
-        if (scale >= 0.15f && currentScene == "Stage1")
+        if (scale >= 0.06f && currentScene == "Stage1")
             SceneManager.LoadScene("Stage2");
-        else if (scale >= 0.3f && currentScene == "Stage2")
+        else if (scale >= 0.2f && currentScene == "Stage2")
             SceneManager.LoadScene("Stage3");
-        else if (scale >= 0.5f && currentScene == "Stage3")
-            FindObjectOfType<EnemySpawner>()?.SpawnBosses();
+        
     }
 
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
 
     public int spawnCount = 20;
     public float spawnMargin = 0.3f;
+    private bool hasSpawnedBoss = false;
 
     void Start()
     {
@@ -26,13 +28,30 @@ public class EnemySpawner : MonoBehaviour
 
             yield return null;
         }
-
-        SpawnEnemies();
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Stage3")
+        string currentScene = SceneManager.GetActiveScene().name;
+       if(currentScene=="Stage1" || currentScene=="Stage2")
         {
+            SpawnEnemies();
+        }
+       else if(currentScene=="Stage3")
+        {
+            StartCoroutine(SpawnEnemiesUnitScaleLimit());
             SpawnBosses();
         }
-
+      
+    }
+    IEnumerator SpawnEnemiesUnitScaleLimit()
+    {
+        while(true)
+        {
+            if(PlayerData.Instance!=null&&PlayerData.Instance.savedScale>=0.5f)
+            {
+                Debug.Log("scale 0.5이상, 일반 적 스폰 종료");
+                yield break;
+            }
+            SpawnEnemies();
+            yield return new WaitForSeconds(5f);
+        }
     }
 
     public void SpawnEnemies()

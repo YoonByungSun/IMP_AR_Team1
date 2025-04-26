@@ -7,7 +7,7 @@ public class StageManager : MonoBehaviour
     public Text stage2Text;
     public Text stage3Text;
 
-    private int currentStage = 1;
+    public int currentStage = 1;
 
     private readonly Color activeColor = new Color32(0xFF, 0x83, 0x9E, 0xFF);  // #FF839E
     private readonly Color inactiveColor = new Color32(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
@@ -27,15 +27,15 @@ public class StageManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("모든 스테이지를 클리어했습니다!");
+            Debug.Log("Game Clear !");
         }
     }
 
     private void InitStageTexts()
     {
-        stage1Text.text = "AM 12:00";
-        stage2Text.text = "AM 3:00";
-        stage3Text.text = "AM 6:00";
+        stage1Text.text = "> AM 12:00";
+        stage2Text.text = "> AM 3:00";
+        stage3Text.text = "> AM 6:00";
     }
 
     private void UpdateStageUI()
@@ -56,7 +56,7 @@ public class StageManager : MonoBehaviour
         else
         {
             text.color = inactiveColor;
-            text.fontSize = 36;
+            text.fontSize = 40;
         }
     }
 }

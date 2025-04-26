@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.UI;  // Text 사용 시 반드시 필요!
+using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
     public Text stage1Text;
     public Text stage2Text;
     public Text stage3Text;
+
+    public Text gameClearText; // Game Clear! 텍스트 오브젝트
 
     public int currentStage = 1;
 
@@ -16,6 +18,11 @@ public class StageManager : MonoBehaviour
     {
         InitStageTexts();
         UpdateStageUI();
+
+        if (gameClearText != null)
+        {
+            gameClearText.gameObject.SetActive(false); // 시작 시 비활성화
+        }
     }
 
     public void NextStage()
@@ -28,6 +35,7 @@ public class StageManager : MonoBehaviour
         else
         {
             Debug.Log("Game Clear !");
+            ShowGameClearText();
         }
     }
 
@@ -40,7 +48,6 @@ public class StageManager : MonoBehaviour
 
     private void UpdateStageUI()
     {
-        // 전체 텍스트 스타일 업데이트
         SetStageStyle(stage1Text, 1);
         SetStageStyle(stage2Text, 2);
         SetStageStyle(stage3Text, 3);
@@ -59,4 +66,13 @@ public class StageManager : MonoBehaviour
             text.fontSize = 40;
         }
     }
+
+    private void ShowGameClearText()
+    {
+        if (gameClearText != null)
+        {
+            gameClearText.gameObject.SetActive(true);
+        }
+    }
 }
+

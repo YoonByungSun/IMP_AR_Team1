@@ -1,0 +1,2 @@
+C:\Users\ssp31n\Desktop\2025Spring\IMP\Git\AR_Project\IMP_AR_Team1\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\ssp31n\Desktop\2025Spring\IMP\Git\AR_Project\IMP_AR_Team1\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

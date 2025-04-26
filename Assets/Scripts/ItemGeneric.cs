@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ItemGeneric : MonoBehaviour
 {
-    // 스폰 시 자동 설정됨. 수정 불필요
     public string itemName = "GenericItem";
     public Vector3 rotateSpeed = new Vector3(45f, 90f, 30f);
 
@@ -15,12 +14,13 @@ public class ItemGeneric : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerController pc = other.GetComponent<PlayerController>();
-            if (pc != null)
+            // 인벤토리에 직접 추가
+            if (Inventory.Instance != null)
             {
-                pc.AddItem(itemName, this.gameObject);
-                Destroy(gameObject);
+                Inventory.Instance.AddItem(itemName);
+                Debug.Log($"{itemName} 아이템 인벤토리에 추가됨 (ItemGeneric)");
             }
+            Destroy(gameObject);
         }
     }
 }

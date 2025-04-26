@@ -1,5 +1,6 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class EnemySpawner : MonoBehaviour
     private Transform player;
 
     public int spawnCount = 20;
+    public float spawnMargin = 0.3f;
+    private bool hasSpawnedBoss = false;
 
     void Start()
     {
@@ -25,62 +28,86 @@ public class EnemySpawner : MonoBehaviour
 
             yield return null;
         }
-
-        SpawnEnemies();
+        string currentScene = SceneManager.GetActiveScene().name;
+       if(currentScene=="Stage1" || currentScene=="Stage2")
+        {
+            SpawnEnemies();
+        }
+       else if(currentScene=="Stage3")
+        {
+            StartCoroutine(SpawnEnemiesUnitScaleLimit());
+            SpawnBosses();
+        }
+      
+    }
+    IEnumerator SpawnEnemiesUnitScaleLimit()
+    {
+        while(true)
+        {
+            if(PlayerData.Instance!=null&&PlayerData.Instance.savedScale>=0.5f)
+            {
+                Debug.Log("scale 0.5이상, 일반 적 스폰 종료");
+                yield break;
+            }
+            SpawnEnemies();
+            yield return new WaitForSeconds(5f);
+        }
     }
 
     public void SpawnEnemies()
     {
-        Renderer[] renderers = roomTransform.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0) return;
+        if (player == null) return;
+        if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
-        Bounds combinedBounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            combinedBounds.Encapsulate(renderers[i].bounds);
-        }
+        Bounds bounds = roomCollider.bounds;
+        Vector3 roomMin = bounds.min;
+        Vector3 roomMax = bounds.max;
 
-        Vector3 roomMin = combinedBounds.min;
-        Vector3 roomMax = combinedBounds.max;
+        float yPos = 0.1f; // ✅ 플레이어와 동일하게 Y 고정
 
         for (int i = 0; i < spawnCount; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomMin.x, roomMax.x),
-                combinedBounds.center.y + 0.3f,
-                Random.Range(roomMin.z, roomMax.z)
+                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin), // X 랜덤
+                yPos,                                                            // Y 고정
+                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)  // Z 랜덤
             );
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject enemy = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);
-            enemy.GetComponent<EnemyController>().SetInitialDirection(player.position);
+
+            if (enemy.TryGetComponent(out EnemyController ec) && player != null)
+            {
+                ec.SetInitialDirection(player.position);
+            }
         }
     }
 
+
     public void SpawnBosses()
     {
-        Renderer[] renderers = roomTransform.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0) return;
+        if (player == null) return;
+        if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
-        Bounds combinedBounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            combinedBounds.Encapsulate(renderers[i].bounds);
-        }
-
-        Vector3 roomMin = combinedBounds.min;
-        Vector3 roomMax = combinedBounds.max;
+        Bounds bounds = roomCollider.bounds;
+        Vector3 roomMin = bounds.min;
+        Vector3 roomMax = bounds.max;
+        float yPos = roomMin.y + 0.3f;
 
         for (int i = 0; i < 2; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomMin.x, roomMax.x),
-                combinedBounds.center.y + 0.3f,
-                Random.Range(roomMin.z, roomMax.z)
+                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin),
+                yPos,
+                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)
             );
 
             GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
-            boss.GetComponent<BossController>().player = player;
+
+            if (boss.TryGetComponent(out BossController bc) && player != null)
+            {
+                bc.player = player;
+            }
         }
     }
 }

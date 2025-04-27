@@ -21,8 +21,9 @@ public class Inventory : MonoBehaviour
 
     public void UseItem(int index)
     {
+        Transform player = FindAnyObjectByType<PlayerController>().transform;
         if (index < 0 || index >= items.Count) return;
-        items[index].Use();
+        items[index].Use(player);
         items.RemoveAt(index);
         InventoryUI.Instance?.RefreshUI();
     }

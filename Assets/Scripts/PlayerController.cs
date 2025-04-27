@@ -136,19 +136,18 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene("GameOverScene");
     }
 
-    public void ActivateFkiller()
-    {
-        isFkillerActive = true;
-        if (fkillerEffect != null)
-            fkillerEffect.SetActive(true);
-        Invoke("DeactivateFkiller", 5f);
-    }
+    //public void ActivateFkiller()
+    //{
+    //    isFkillerActive = true;
+    //    if (fkillerEffect != null)
+    //        fkillerEffect.SetActive(true);
+    //    Invoke("DeactivateFkiller", 5f);
+    //}
 
-    void DeactivateFkiller()
-    {
-        isFkillerActive = false;    
-        if (fkillerEffect != null)
-            fkillerEffect.SetActive(false);
-    }
+    //void DeactivateFkiller()
+    //{
+    //    isFkillerActive = false;
+    //    if (fkillerEffect != null)
+    //        fkillerEffect.SetActive(false);
+    //}
 }
-

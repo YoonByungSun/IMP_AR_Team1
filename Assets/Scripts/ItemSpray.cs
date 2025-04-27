@@ -1,10 +1,15 @@
 using UnityEngine;
 
-public class ItemSpray : MonoBehaviour, ItemInterface
+public class ItemSpray : ItemGeneric
 {
     public float radius = 2.0f;
 
-    public void Use(Transform player)
+    private void Reset()
+    {
+        itemName = "Spray";
+    }
+
+    public override void Use(Transform player)
     {
         foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
@@ -13,7 +18,5 @@ public class ItemSpray : MonoBehaviour, ItemInterface
                 Destroy(enemy);
             }
         }
-
-        Debug.Log("Pesticide Used.");
     }
 }

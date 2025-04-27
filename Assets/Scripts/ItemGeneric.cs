@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ItemGeneric : MonoBehaviour
 {
-    public string itemName = "GenericItem";
+    public string itemName = "Generic Item";
     public Vector3 rotateSpeed = new Vector3(45f, 90f, 30f);
 
     void Update()
@@ -14,13 +14,13 @@ public class ItemGeneric : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            // 인벤토리에 직접 추가
-            if (Inventory.Instance != null)
-            {
-                Inventory.Instance.AddItem(itemName);
-                Debug.Log($"{itemName} 아이템 인벤토리에 추가됨 (ItemGeneric)");
-            }
-            Destroy(gameObject);
+            Inventory.Instance.AddItem(this);
+            gameObject.SetActive(false); // 혹은 Destroy(gameObject);
         }
+    }
+
+    public virtual void Use(Transform player)
+    {
+        Debug.Log($"{itemName} 오버라이드 필요");
     }
 }

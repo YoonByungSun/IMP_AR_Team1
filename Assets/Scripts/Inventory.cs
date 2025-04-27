@@ -3,37 +3,32 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public static Inventory Instance { get; private set; }
-
-    public List<string> items = new List<string>();
+    public static Inventory Instance;
+    private List<ItemGeneric> items = new List<ItemGeneric>();
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // 씬 전환에도 파괴되지 않음
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    public void AddItem(string itemName)
+    public void AddItem(ItemGeneric item)
     {
-        items.Add(itemName);
-        Debug.Log("인벤토리 추가: " + itemName);
+        items.Add(item);
+        Debug.Log($"{item.itemName} 인벤토리에 추가됨!");
+        InventoryUI.Instance?.RefreshUI();
     }
 
-    public void RemoveItem(string itemName)
+    public void UseItem(int index)
     {
-        items.Remove(itemName);
-        Debug.Log("인벤토리 제거: " + itemName);
+        if (index < 0 || index >= items.Count) return;
+        items[index].Use();
+        items.RemoveAt(index);
+        InventoryUI.Instance?.RefreshUI();
     }
 
-    public bool HasItem(string itemName)
+    public List<ItemGeneric> GetAllItems()
     {
-        return items.Contains(itemName);
+        return new List<ItemGeneric>(items);
     }
 }

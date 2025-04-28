@@ -57,20 +57,19 @@ public class EnemySpawner : MonoBehaviour
     public void SpawnEnemies()
     {
         if (player == null) return;
-        if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
+        if (roomTransform == null) return;
 
-        Bounds bounds = roomCollider.bounds;
-        Vector3 roomMin = bounds.min;
-        Vector3 roomMax = bounds.max;
+        Vector3 roomCenter = roomTransform.position;
+        Vector3 roomSize = roomTransform.localScale; // 크기 기준
 
-        float yPos = 0.1f; // ✅ 플레이어와 동일하게 Y 고정
+        float yPos = 0.3f; // room 위로 약간 띄우기
 
         for (int i = 0; i < spawnCount; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin), // X 랜덤
-                yPos,                                                            // Y 고정
-                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)  // Z 랜덤
+                Random.Range(roomCenter.x - roomSize.x / 2f + spawnMargin, roomCenter.x + roomSize.x / 2f - spawnMargin),
+                yPos,
+                Random.Range(roomCenter.z - roomSize.z / 2f + spawnMargin, roomCenter.z + roomSize.z / 2f - spawnMargin)
             );
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);

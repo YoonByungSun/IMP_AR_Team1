@@ -10,10 +10,13 @@ public class Inventory : MonoBehaviour
     {
         public string name;
         public int count;
-        public Item(string name, int count = 1)
+        public Sprite icon;  // [추가] 아이콘 저장
+
+        public Item(string name, int count = 1, Sprite icon = null)
         {
             this.name = name;
             this.count = count;
+            this.icon = icon;
         }
     }
 
@@ -24,30 +27,27 @@ public class Inventory : MonoBehaviour
     }
 
     // 아이템 추가
-    public void AddItem(string itemName)
+    public void AddItem(string itemName, Sprite itemIcon = null)
     {
-        for (int i = 0; i < items.Count; i++)
+        int idx = items.FindIndex(x => x.name == itemName);
+        if (idx != -1)
         {
-            if (items[i].name == itemName)
-            {
-                Item updated = items[i];
-                updated.count++;
-                items[i] = updated;
-                InventoryUI.Instance?.RefreshUI();
-                return;
-            }
+            items[idx] = new Item(items[idx].name, items[idx].count + 1, items[idx].icon);
         }
-        items.Add(new Item(itemName, 1));
-        InventoryUI.Instance?.RefreshUI();
+        else
+        {
+            items.Add(new Item(itemName, 1, itemIcon));
+        }
+
+        InventoryUI.Instance?.UpdateSingleItemUI(itemName, items[idx != -1 ? idx : items.Count - 1].count);
     }
 
-    // 아이템 사용 (UseItem에서 인벤토리에서 이름만 꺼냄 → Use 함수 실행)
+    // 아이템 사용
     public void UseItem(int index, Transform player)
     {
         if (index < 0 || index >= items.Count) return;
         string itemName = items[index].name;
 
-        // 플레이어에게 Attach된 해당 아이템 스크립트 찾아서 Use 실행
         ItemGeneric itemScript = player.GetComponent<ItemGeneric>();
         if (itemScript && itemScript.itemName == itemName)
         {
@@ -55,8 +55,6 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            // 플레이어 오브젝트에 해당 아이템 스크립트가 없으면 임시 인스턴스 생성 후 사용
-            // (이 방식은 상황에 따라 다를 수 있으니, 필요시 커스터마이징)
             switch (itemName)
             {
                 case "Spray":
@@ -64,18 +62,19 @@ public class Inventory : MonoBehaviour
                     spray.Use(player);
                     Destroy(spray);
                     break;
-                // case "다른아이템명": ... break;
                 default:
                     Debug.Log($"{itemName} 사용 스크립트 없음");
                     break;
             }
         }
 
-        // 개수 감소
+        // 수량 감소
         Item updatedItem = items[index];
         updatedItem.count--;
-        if (updatedItem.count <= 0) items.RemoveAt(index);
-        else items[index] = updatedItem;
+        if (updatedItem.count <= 0)
+            items.RemoveAt(index);
+        else
+            items[index] = updatedItem;
 
         InventoryUI.Instance?.RefreshUI();
     }

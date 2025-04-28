@@ -1,14 +1,12 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ItemSpawner : MonoBehaviour
 {
-    public GameObject[] itemPrefabs; // 여러 아이템 프리팹
+    public GameObject[] itemPrefabs;
     public Transform roomTransform;
     public int spawnCount = 5;
     public float spawnMargin = 0.3f;
-    private bool hasSpawned = false;
 
     void Start()
     {
@@ -17,12 +15,7 @@ public class ItemSpawner : MonoBehaviour
 
     IEnumerator WaitForRoomAndSpawn()
     {
-        // roomTransform 설정이 늦게 될 수 있음
-        while (roomTransform == null)
-        {
-            yield return null;
-        }
-
+        while (roomTransform == null) yield return null;
         SpawnItems();
     }
 
@@ -34,8 +27,7 @@ public class ItemSpawner : MonoBehaviour
         Bounds bounds = roomCollider.bounds;
         Vector3 roomMin = bounds.min;
         Vector3 roomMax = bounds.max;
-
-        float yPos = 0.1f; // ✅ 플레이어/적과 동일하게 Y 고정
+        float yPos = 0.1f;
 
         for (int i = 0; i < spawnCount; i++)
         {

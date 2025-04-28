@@ -5,8 +5,10 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI Instance;
-    public GameObject itemButtonPrefab;
-    public Transform contentParent;
+    public Transform itemListParent;
+    public GameObject itemSlotPrefab;
+
+    private List<GameObject> itemSlots = new List<GameObject>();
 
     void Awake()
     {
@@ -14,30 +16,30 @@ public class InventoryUI : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    void OnEnable()
-    {
-        RefreshUI();
-    }
-
     public void RefreshUI()
     {
-        foreach (Transform child in contentParent)
-            Destroy(child.gameObject);
+        // 기존 슬롯 제거
+        foreach (var slot in itemSlots) Destroy(slot);
+        itemSlots.Clear();
 
-        List<ItemGeneric> items = Inventory.Instance.GetAllItems();
-
+        var items = Inventory.Instance.GetAllItems();
         for (int i = 0; i < items.Count; i++)
         {
-            int idx = i;
-            GameObject btnObj = Instantiate(itemButtonPrefab, contentParent);
-            btnObj.GetComponentInChildren<Text>().text = items[i].itemName;
-            btnObj.GetComponent<Button>().onClick.AddListener(() => OnItemClicked(idx));
-        }
-    }
+            var slot = Instantiate(itemSlotPrefab, itemListParent);
+            itemSlots.Add(slot);
 
-    void OnItemClicked(int index)
-    {
-        Inventory.Instance.UseItem(index);
-        RefreshUI();
+            Text txt = slot.GetComponentInChildren<Text>();
+            if (txt) txt.text = $"{items[i].name} x{items[i].count}";
+
+            int idx = i;
+            Button btn = slot.GetComponent<Button>();
+            if (btn != null)
+                btn.onClick.AddListener(() =>
+                {
+                    // 플레이어 Transform을 넘겨줘야 함
+                    var player = FindAnyObjectByType<PlayerController>()?.transform;
+                    if (player != null) Inventory.Instance.UseItem(idx, player);
+                });
+        }
     }
 }

@@ -2,25 +2,33 @@ using UnityEngine;
 
 public class ItemGeneric : MonoBehaviour
 {
-    public string itemName = "Generic Item";
+    [Header("Item Info")]
+    public string itemName = "GenericItem";
     public Vector3 rotateSpeed = new Vector3(45f, 90f, 30f);
 
-    void Update()
+    protected virtual void Reset()
+    {
+        // 자식에서 itemName 자동 지정
+    }
+
+    protected virtual void Update()
     {
         transform.Rotate(rotateSpeed * Time.deltaTime, Space.World);
     }
 
-    private void OnTriggerEnter(Collider other)
+    // 트리거 충돌 시 인벤토리에 추가
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Inventory.Instance.AddItem(this);
-            gameObject.SetActive(false); // 혹은 Destroy(gameObject);
+            Inventory.Instance?.AddItem(itemName);
+            Destroy(gameObject);
         }
     }
 
+    // 아이템 사용 인터페이스 (오버라이드용)
     public virtual void Use(Transform player)
     {
-        Debug.Log($"{itemName} 오버라이드 필요");
+        Debug.Log($"{itemName} 사용 (기본)");
     }
 }

@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  speed: 0.2
+  speed: 0.1
 --- !u!65 &601559596958176693
 BoxCollider:
   m_ObjectHideFlags: 0

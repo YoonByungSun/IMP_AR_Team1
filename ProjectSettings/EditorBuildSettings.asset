@@ -24,8 +24,8 @@ EditorBuildSettings:
     path: Assets/Scenes/GameClear.unity
     guid: 5e0107b7a026bac48a4cfd6361728409
   - enabled: 1
-    path: Assets/Scenes/UI.unity
-    guid: 03355cda95d705d46963f29e3e02fb49
+    path: Assets/Scenes/GameOverScene.unity
+    guid: 01a0738888cb4554bb9c8921e6b33609
   m_configObjects:
     AR Foundation RemoteARFoundationRemoteLoaderSettings: {fileID: 11400000, guid: bc8204ec6a4f67342b226c6106192124, type: 2}
     AR Foundation RemoteARFoundationRemoteSessionRecordsData: {fileID: 11400000, guid: b12573798753c6d499f56ab867836d41, type: 2}

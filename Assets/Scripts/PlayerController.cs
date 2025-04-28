@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,70 +11,46 @@ public class PlayerController : MonoBehaviour
     private bool isDead = false;
     private int bossKillCount = 0;
     private GameObject spawnedPlayer;
-
-    // 생명 관련 변수
-    public int maxLife = 3;
-    private int currentLife;
-    public GameObject heartPrefab;
-    public Transform heartParent;
-    private List<GameObject> hearts = new List<GameObject>();
-
-    // UI 관련 변수
-    public GameObject retryButton;
-    public Text gameOverText;
-
-    private void Start()
+    void Start()
     {
-        // Stage1이 아닐 때 저장된 스케일 적용
         string currentScene = SceneManager.GetActiveScene().name;
+
+        // Stage1이 아닐 때만 저장된 스케일 적용
         if (currentScene != "Stage1" && PlayerData.Instance != null)
         {
             scale = PlayerData.Instance.savedScale;
             transform.localScale = new Vector3(scale, scale, scale);
-            Debug.Log("PlayerController: savedScale applied = " + scale);
-        }
-
-        // 생명 초기화 및 하트 UI 생성
-        currentLife = maxLife;
-        retryButton.SetActive(false);
-        gameOverText.gameObject.SetActive(false);
-        CreateHearts();
-    }
-
-    void CreateHearts()
-    {
-        // 하트 오브젝트를 생성하고 화면에 배치
-        for (int i = 0; i < maxLife; i++)
-        {
-            GameObject heart = Instantiate(heartPrefab, heartParent);
-            heart.GetComponent<RectTransform>().anchoredPosition = new Vector2(60 * i, 0);
-            hearts.Add(heart);
+            Debug.Log($"📌 PlayerController: savedScale 적용됨 = {scale}");
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+
+
+    void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collision detected: " + other.name + ", tag = " + other.tag);
+        Debug.Log($"[충돌 발생] other.name = {other.name}, tag = {other.tag}");
 
         if (other.CompareTag("Enemy"))
         {
             EnemyController enemy = other.GetComponent<EnemyController>();
             if (enemy == null)
             {
-                Debug.LogWarning("Enemy tag detected but no EnemyController attached.");
+                Debug.LogWarning("Enemy 태그인데 EnemyController가 없음");
                 return;
             }
 
-            Debug.Log("Enemy type: " + enemy.enemyType);
+            Debug.Log($"[EnemyController 확인] enemyType = {enemy.enemyType}");
 
             switch (enemy.enemyType)
             {
                 case EnemyController.EnemyType.Mushnub:
+                    Debug.Log("✅ Mushnub과 충돌 → ScaleUp");
                     ScaleUp(0.01f);
                     Destroy(other.gameObject);
                     break;
 
                 case EnemyController.EnemyType.GreenBlob:
+                    Debug.Log("🟢 GreenBlob과 충돌");
                     if (scale >= 0.06f)
                     {
                         ScaleUp(0.02f);
@@ -84,11 +58,13 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        LoseLife();
+                        Debug.Log("🛑 GreenBlob 조건 미달 → GameOver");
+                        GameOver();
                     }
                     break;
 
                 case EnemyController.EnemyType.AlienBlob:
+                    Debug.Log("👽 AlienBlob과 충돌");
                     if (scale >= 0.2f)
                     {
                         ScaleUp(0.03f);
@@ -96,15 +72,17 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        LoseLife();
+                        GameOver();
                     }
                     break;
 
                 default:
-                    Debug.LogError("Unknown enemyType.");
+                    Debug.LogError("❗알 수 없는 enemyType");
                     break;
             }
         }
+    
+
 
         if (other.CompareTag("Boss"))
         {
@@ -120,88 +98,56 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                LoseLife();
+                GameOver();
             }
         }
     }
 
     void ScaleUp(float amount)
     {
-        // 플레이어 스케일 증가
-        scale = Mathf.Min(scale + amount, 1.0f);
-        transform.localScale = new Vector3(scale, scale, scale);
+        scale = Mathf.Min(scale + amount, 1.0f); // 최대 크기 제한은 네가 정하기 나름
+
+        transform.localScale = new Vector3(scale, scale, scale);  // 실제 크기로 적용
         transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
 
+        // 저장
         if (PlayerData.Instance != null)
         {
             PlayerData.Instance.savedScale = scale;
-            Debug.Log("Scale saved: " + scale);
+            Debug.Log($"✅ 스케일 저장됨: {scale}");
         }
 
-        // 스테이지 전환 처리
         string currentScene = SceneManager.GetActiveScene().name;
+
         if (scale >= 0.06f && currentScene == "Stage1")
             SceneManager.LoadScene("Stage2");
         else if (scale >= 0.2f && currentScene == "Stage2")
             SceneManager.LoadScene("Stage3");
+        
     }
 
-    void LoseLife()
-    {
-        // 생명 감소 처리
-        if (isDead || currentLife <= 0) return;
 
-        currentLife--;
 
-        if (currentLife >= 0 && currentLife < hearts.Count)
-        {
-            Destroy(hearts[currentLife]);
-            hearts.RemoveAt(currentLife);
-        }
-
-        if (currentLife <= 0)
-        {
-            GameOver();
-        }
-    }
 
     void GameOver()
     {
-        // 게임 오버 처리
         if (isDead) return;
-
         isDead = true;
-
-        if (gameOverText != null)
-            gameOverText.gameObject.SetActive(true);
-
-        if (retryButton != null)
-            retryButton.SetActive(true);
+        SceneManager.LoadScene("GameOverScene");
     }
 
-    public void RetryGame()
-    {
-        // 현재 씬 다시 로드
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+    //public void ActivateFkiller()
+    //{
+    //    isFkillerActive = true;
+    //    if (fkillerEffect != null)
+    //        fkillerEffect.SetActive(true);
+    //    Invoke("DeactivateFkiller", 5f);
+    //}
 
-    public void ActivateFkiller()
-    {
-        // Fkiller 기능 활성화
-        isFkillerActive = true;
-        if (fkillerEffect != null)
-            fkillerEffect.SetActive(true);
-        Invoke("DeactivateFkiller", 5f);
-    }
-
-    void DeactivateFkiller()
-    {
-        // Fkiller 기능 비활성화
-        isFkillerActive = false;
-        if (fkillerEffect != null)
-            fkillerEffect.SetActive(false);
-    }
+    //void DeactivateFkiller()
+    //{
+    //    isFkillerActive = false;
+    //    if (fkillerEffect != null)
+    //        fkillerEffect.SetActive(false);
+    //}
 }
-
-
-

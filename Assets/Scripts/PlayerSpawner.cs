@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
-using UnityEngine.SceneManagement;
 
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public Vector3 defaultScale = new Vector3(0.03f, 0.03f, 0.03f);
+    public static float fixedPlayerY = 0.3f; // 💡 enemy들도 이 Y값 참조
 
     private GameObject spawnedPlayer;
     private ARTrackedImage trackedImage;
@@ -38,22 +38,36 @@ public class PlayerSpawner : MonoBehaviour
                 trackedImage = addedImage;
 
                 Vector3 markerPos = trackedImage.transform.position;
-                Vector3 spawnPos = new Vector3(markerPos.x, markerPos.y + 0.3f, markerPos.z);
+
+                // ✅ Room이 있으면 Room 위에 생성
+                GameObject room = GameObject.Find("Room(Clone)");
+                float yOffset = 0.05f;
+                float baseY = markerPos.y;
+
+                if (room != null)
+                {
+                    baseY = room.transform.position.y + (room.transform.localScale.y * 0.5f) + yOffset;
+                }
+
+                fixedPlayerY = baseY;
+                Vector3 spawnPos = new Vector3(markerPos.x, fixedPlayerY, markerPos.z);
 
                 spawnedPlayer = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-                string currentScene= SceneManager.GetActiveScene().name;
-                float scaleFactor;
-                if(currentScene=="Stage1")
-                {
-                    scaleFactor = 0.03f;
 
+                string currentScene = SceneManager.GetActiveScene().name;
+                float scaleFactor;
+
+                if (PlayerData.Instance != null)
+                {
+                    PlayerData.Instance.SetScaleForStage(currentScene);
+                    scaleFactor = PlayerData.Instance.savedScale;
                 }
                 else
                 {
-                    scaleFactor = PlayerData.Instance!= null ? PlayerData.Instance.savedScale : 0.03f;
+                    scaleFactor = 0.03f;
                 }
 
-                    spawnedPlayer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);    
+                spawnedPlayer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
                 spawnedPlayer.tag = "Player";
 
                 Debug.Log("✅ 플레이어 생성 완료: " + spawnPos);
@@ -66,11 +80,10 @@ public class PlayerSpawner : MonoBehaviour
             {
                 Vector3 markerPos = updatedImage.transform.position;
 
-                // ✅ Y는 고정, XZ는 마커 따라감
-                Vector3 newPos = new Vector3(markerPos.x, 0.3f, markerPos.z);
+                // ✅ XZ는 마커 따라가고, Y는 고정된 값 유지
+                Vector3 newPos = new Vector3(markerPos.x, fixedPlayerY, markerPos.z);
                 spawnedPlayer.transform.position = newPos;
             }
         }
-
     }
 }

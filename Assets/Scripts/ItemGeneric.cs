@@ -4,6 +4,7 @@ public class ItemGeneric : MonoBehaviour
 {
     [Header("Item Info")]
     public string itemName = "GenericItem";
+    public Sprite itemIcon;
     public Vector3 rotateSpeed = new Vector3(45f, 90f, 30f);
 
     protected virtual void Reset()
@@ -21,7 +22,7 @@ public class ItemGeneric : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Inventory.Instance?.AddItem(itemName);
+            Inventory.Instance?.AddItem(itemName, itemIcon);
             Destroy(gameObject);
         }
     }

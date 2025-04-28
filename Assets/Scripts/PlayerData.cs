@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     public static PlayerData Instance;
-    public float savedScale = 1f;
+    public float savedScale = 0.01f;
     void Awake()
     {
         if(Instance==null)
@@ -20,6 +20,9 @@ public class PlayerData : MonoBehaviour
     {
         switch(stageName)
         {
+            case "Stage1":
+            savedScale = 0.01f;
+                break;
             case "Stage2":
                 savedScale = 0.06f;
                 break;
@@ -28,7 +31,7 @@ public class PlayerData : MonoBehaviour
                 break;
             
             default:
-                savedScale = 1f;
+                savedScale = 0.01f;
                 break;
 
         }

@@ -32,7 +32,7 @@ public class ARSpawnOnPlane : MonoBehaviour
                     Pose hitPose = hits[0].pose;
                     Vector3 adjustedPosition= new Vector3(
                         hitPose.position.x,
-                        hitPose.position.y-0.05f,
+                        hitPose.position.y-0.2f,
                         hitPose .position.z);
                     GameObject room= Instantiate(spawnPrefab, adjustedPosition, hitPose.rotation);
                     DontDestroyOnLoad(room);

@@ -38,7 +38,7 @@ public class PlayerSpawner : MonoBehaviour
                 trackedImage = addedImage;
 
                 Vector3 markerPos = trackedImage.transform.position;
-                Vector3 spawnPos = new Vector3(markerPos.x, markerPos.y + 0.05f, markerPos.z);
+                Vector3 spawnPos = new Vector3(markerPos.x, markerPos.y + 0.3f, markerPos.z);
 
                 spawnedPlayer = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
                 string currentScene= SceneManager.GetActiveScene().name;
@@ -67,7 +67,7 @@ public class PlayerSpawner : MonoBehaviour
                 Vector3 markerPos = updatedImage.transform.position;
 
                 // ✅ Y는 고정, XZ는 마커 따라감
-                Vector3 newPos = new Vector3(markerPos.x, 0.1f, markerPos.z);
+                Vector3 newPos = new Vector3(markerPos.x, 0.3f, markerPos.z);
                 spawnedPlayer.transform.position = newPos;
             }
         }

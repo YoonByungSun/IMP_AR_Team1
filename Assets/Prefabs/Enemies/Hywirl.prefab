@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: f1f054186c91b13409025117df881caa, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.15
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f1f054186c91b13409025117df881caa, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.15
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f1f054186c91b13409025117df881caa, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.15
+      value: 0.06
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f1f054186c91b13409025117df881caa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 4226572049217211521, guid: a0d60bdd219a79043a972d7db8577fdb, type: 3}
-  speed: 3
+  speed: 0.08
 --- !u!65 &5737469337093334638
 BoxCollider:
   m_ObjectHideFlags: 0

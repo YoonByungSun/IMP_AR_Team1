@@ -699,7 +699,6 @@ MonoBehaviour:
   - {fileID: 3498431565274336602, guid: 36dd68e4ab5f9224a92fd8342eeab474, type: 3}
   bossPrefab: {fileID: 8653476890410818828, guid: b7ca3c46e9a133a4ca900cb9a8c707d6, type: 3}
   roomTransform: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
-  spawnCount: 50
   spawnMargin: 0.3
 --- !u!4 &774229223
 Transform:
@@ -813,8 +812,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870979736}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09777198, y: -2.5555532, z: 2.8328826}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09777188, y: -2.5555532, z: 2.8328826}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -873,5 +872,5 @@ SceneRoots:
   - {fileID: 32289484}
   - {fileID: 28187895}
   - {fileID: 1595443536}
-  - {fileID: 1870979738}
   - {fileID: 1987025345}
+  - {fileID: 1870979738}

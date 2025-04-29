@@ -1,10 +1,10 @@
-/Assets/Plugins/ARFoundationRemoteInstaller/
-/Assets/Plugins/ARFoundationRemoteInstaller.meta
-/Assets/XR/
-/ARFoundationRemoteCompanionApp/
+# /Assets/Plugins/ARFoundationRemoteInstaller/
+# /Assets/Plugins/ARFoundationRemoteInstaller.meta
+# /Assets/XR/
+# /ARFoundationRemoteCompanionApp/
 
-/.utmp/
-/UpgradeLog.htm
+# /.utmp/
+# /UpgradeLog.htm
 
 # This .gitignore file should be placed at the root of your Unity project directory
 #

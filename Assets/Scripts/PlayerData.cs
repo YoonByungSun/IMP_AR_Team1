@@ -24,10 +24,10 @@ public class PlayerData : MonoBehaviour
             savedScale = 0.01f;
                 break;
             case "Stage2":
-                savedScale = 0.06f;
+                savedScale = 0.03f;
                 break;
             case "Stage3":
-                savedScale = 0.2f;
+                savedScale = 0.06f;
                 break;
             
             default:

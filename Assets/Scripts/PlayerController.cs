@@ -45,15 +45,15 @@ public class PlayerController : MonoBehaviour
             {
                 case EnemyController.EnemyType.Mushnub:
                     Debug.Log("✅ Mushnub과 충돌 → ScaleUp");
-                    ScaleUp(0.01f);
+                    ScaleUp(0.002f);
                     Destroy(other.gameObject);
                     break;
 
                 case EnemyController.EnemyType.GreenBlob:
                     Debug.Log("🟢 GreenBlob과 충돌");
-                    if (scale >= 0.06f)
+                    if (scale >= 0.03f)
                     {
-                        ScaleUp(0.02f);
+                        ScaleUp(0.002f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -65,9 +65,9 @@ public class PlayerController : MonoBehaviour
 
                 case EnemyController.EnemyType.AlienBlob:
                     Debug.Log("👽 AlienBlob과 충돌");
-                    if (scale >= 0.2f)
+                    if (scale >= 0.06f)
                     {
-                        ScaleUp(0.03f);
+                        ScaleUp(0.005f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Boss"))
         {
-            if (scale >= 0.35f)
+            if (scale >= 0.15f)
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
@@ -119,9 +119,9 @@ public class PlayerController : MonoBehaviour
 
         string currentScene = SceneManager.GetActiveScene().name;
 
-        if (scale >= 0.06f && currentScene == "Stage1")
+        if (scale >= 0.03f && currentScene == "Stage1")
             SceneManager.LoadScene("Stage2");
-        else if (scale >= 0.2f && currentScene == "Stage2")
+        else if (scale >= 0.06f && currentScene == "Stage2")
             SceneManager.LoadScene("Stage3");
         
     }

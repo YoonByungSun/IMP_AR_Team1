@@ -9,9 +9,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform roomTransform;
     private Transform player;
 
-    public int spawnCount = 20;
     public float spawnMargin = 0.3f;
-    private bool hasSpawnedBoss = false;
 
     void Start()
     {
@@ -28,49 +26,59 @@ public class EnemySpawner : MonoBehaviour
 
             yield return null;
         }
+
         string currentScene = SceneManager.GetActiveScene().name;
-       if(currentScene=="Stage1" || currentScene=="Stage2")
+
+        if (currentScene == "Stage1" || currentScene == "Stage2")
         {
-            SpawnEnemies();
+            StartCoroutine(SpawnEnemiesUntilScaleLimit());
         }
-       else if(currentScene=="Stage3")
+        else if (currentScene == "Stage3")
         {
-            StartCoroutine(SpawnEnemiesUnitScaleLimit());
+            StartCoroutine(SpawnEnemiesUntilScaleLimit());
             SpawnBosses();
-        }
-      
-    }
-    IEnumerator SpawnEnemiesUnitScaleLimit()
-    {
-        while(true)
-        {
-            if(PlayerData.Instance!=null&&PlayerData.Instance.savedScale>=0.5f)
-            {
-                Debug.Log("scale 0.5이상, 일반 적 스폰 종료");
-                yield break;
-            }
-            SpawnEnemies();
-            yield return new WaitForSeconds(5f);
         }
     }
 
-    public void SpawnEnemies()
+    IEnumerator SpawnEnemiesUntilScaleLimit()
     {
-        if (player == null) return;
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        while (true)
+        {
+            float scale = PlayerData.Instance != null ? PlayerData.Instance.savedScale : 0f;
+
+            if ((currentScene == "Stage1" && scale >= 0.06f) ||
+                (currentScene == "Stage2" && scale >= 0.2f) ||
+                (currentScene == "Stage3" && scale >= 0.5f))
+            {
+                Debug.Log("[EnemySpawner] Scale condition met. Stopping enemy spawn.");
+                yield break;
+            }
+
+            SpawnEnemies(6, 7);
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
+    public void SpawnEnemies(int minSpawn = 1, int maxSpawn = 3)
+    {
+        if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
         Bounds bounds = roomCollider.bounds;
         Vector3 roomMin = bounds.min;
         Vector3 roomMax = bounds.max;
+        float yPos = PlayerSpawner.fixedPlayerY; // ✅ 플레이어 Y 위치 고정값 사용
 
-        float yPos = 0.1f; // ✅ 플레이어와 동일하게 Y 고정
+        int count = Random.Range(minSpawn, maxSpawn + 1);
 
-        for (int i = 0; i < spawnCount; i++)
+        for (int i = 0; i < count; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin), // X 랜덤
-                yPos,                                                            // Y 고정
-                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)  // Z 랜덤
+                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin),
+                yPos,
+                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)
             );
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);
@@ -83,16 +91,15 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-
     public void SpawnBosses()
     {
-        if (player == null) return;
+        if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
         Bounds bounds = roomCollider.bounds;
         Vector3 roomMin = bounds.min;
         Vector3 roomMax = bounds.max;
-        float yPos = roomMin.y + 0.3f;
+        float yPos = PlayerSpawner.fixedPlayerY; // ✅ boss도 같은 Y 위치
 
         for (int i = 0; i < 2; i++)
         {
@@ -111,3 +118,4 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 }
+

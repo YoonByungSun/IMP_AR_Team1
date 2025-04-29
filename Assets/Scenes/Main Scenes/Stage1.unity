@@ -863,7 +863,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee4799a642c5e1a4ea94ea12ea2241a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefabs: []
+  itemPrefabs:
+  - {fileID: 4145092231003505334, guid: 57a26066698e10b4a88897cb5185da53, type: 3}
   roomTransform: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
   spawnCount: 5
   spawnMargin: 0.3

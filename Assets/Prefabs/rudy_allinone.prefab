@@ -97,6 +97,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100038, guid: 48ee0c241535a4f3a979564545eccbf4, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1281616673530678520}
+    - targetCorrespondingSourceObject: {fileID: 100038, guid: 48ee0c241535a4f3a979564545eccbf4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -933212197577653302}
   m_SourcePrefab: {fileID: 100100000, guid: 48ee0c241535a4f3a979564545eccbf4, type: 3}
 --- !u!1 &1480191620638518474 stripped
 GameObject:
@@ -116,7 +119,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: 0.01
-  defaultScale: {x: 0.01, y: 0.01, z: 0.01}
   fkillerEffect: {fileID: 0}
 --- !u!65 &8554374583769619582
 BoxCollider:
@@ -166,3 +168,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-933212197577653302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480191620638518474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f0fbe0e24e2d354891b4330903d18b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  life: 3
+  hearts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  gameOverUI: {fileID: 0}

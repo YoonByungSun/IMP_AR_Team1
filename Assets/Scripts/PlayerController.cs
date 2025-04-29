@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float scale = 1f;
-    public Vector3 defaultScale = new Vector3(0.01f, 0.01f, 0.01f);
+   
     public GameObject fkillerEffect;
 
     private bool isFkillerActive = false;

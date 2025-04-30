@@ -27,8 +27,7 @@ public class StageManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Game Clear !");
-            ShowGameClearText();
+            GameManager.Instance.GameClear();
         }
     }
 
@@ -57,14 +56,6 @@ public class StageManager : MonoBehaviour
         {
             text.color = inactiveColor;
             text.fontSize = 40;
-        }
-    }
-
-    private void ShowGameClearText()
-    {
-        if (gameClearText != null)
-        {
-            gameClearText.gameObject.SetActive(true);
         }
     }
 }

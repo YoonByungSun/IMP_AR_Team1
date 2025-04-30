@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Function: General Items' Settings
 public class ItemGeneric : MonoBehaviour
 {
     [Header("Item Info")]
@@ -9,15 +10,16 @@ public class ItemGeneric : MonoBehaviour
 
     protected virtual void Reset()
     {
-        // 자식에서 itemName 자동 지정
+        // Set from each Item Script (Override)
     }
 
+    // Item Rotating Animation
     protected virtual void Update()
     {
         transform.Rotate(rotateSpeed * Time.deltaTime, Space.World);
     }
 
-    // 트리거 충돌 시 인벤토리에 추가
+    // Add Items in Inventory when Collide with Player Object
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -27,9 +29,9 @@ public class ItemGeneric : MonoBehaviour
         }
     }
 
-    // 아이템 사용 인터페이스 (오버라이드용)
+    // Item Interface (Override)
     public virtual void Use(Transform player)
     {
-        Debug.Log($"{itemName} 사용 (기본)");
+        Debug.LogError($"{itemName} Use() not set");
     }
 }

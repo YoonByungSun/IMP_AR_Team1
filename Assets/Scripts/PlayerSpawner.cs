@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -69,6 +68,7 @@ public class PlayerSpawner : MonoBehaviour
 
                 spawnedPlayer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
                 spawnedPlayer.tag = "Player";
+                spawnedPlayer.transform.parent = new GameObject("Player").transform;
 
                 Debug.Log("✅ 플레이어 생성 완료: " + spawnPos);
             }

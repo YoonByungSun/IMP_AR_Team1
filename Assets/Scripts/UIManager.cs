@@ -39,12 +39,12 @@ public class UIManager : MonoBehaviour
         if (exitButton_Clear != null)
             exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
 
-        // PlayerController에 GameOverUI 연결
-        var player = FindObjectOfType<PlayerController>();
-        if (player != null)
-        {
-            player.gameOverUI = gameOverUI;
-        }
+         //PlayerController에 GameOverUI 연결
+       // var player = FindObjectOfType<PlayerController>();
+       // if (player != null)
+       // {
+        //    player.gameOverUI = gameOverUI;
+       // }
     }
 
     public void StartGame()

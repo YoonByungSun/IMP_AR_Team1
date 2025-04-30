@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [Header("UI Panels")]
+    public GameObject inGameUI;
     public GameObject gameOverUI;
     public GameObject gameClearUI;
     public GameObject menuPanel;  // 타이틀 역할
@@ -18,6 +19,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         // 초기 UI 상태 설정
+        if (inGameUI != null) inGameUI.SetActive(false);
         if (gameOverUI != null) gameOverUI.SetActive(false);
         if (gameClearUI != null) gameClearUI.SetActive(false);
         if (menuPanel != null) menuPanel.SetActive(true);  // 시작 시 타이틀 화면만 보이도록
@@ -50,6 +52,7 @@ public class UIManager : MonoBehaviour
         // MenuPanel 숨기고 게임 씬 로드
         if (menuPanel != null)
             menuPanel.SetActive(false);
+        inGameUI.SetActive(true);
 
         SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
     }

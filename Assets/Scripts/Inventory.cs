@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Function: Manage Collected Items
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
@@ -40,9 +41,11 @@ public class Inventory : MonoBehaviour
         }
 
         InventoryUI.Instance?.UpdateSingleItemUI(itemName, items[idx != -1 ? idx : items.Count - 1].count);
+
+
     }
 
-    // 아이템 사용
+    // For UI only, Use() function in each Item Script, ItemGeneric.cs
     public void UseItem(int index, Transform player)
     {
         if (index < 0 || index >= items.Count) return;
@@ -58,12 +61,13 @@ public class Inventory : MonoBehaviour
             switch (itemName)
             {
                 case "Spray":
+                    // 인벤토리 내 아이템 아이콘에도 ItemSpray.cs 있어야함
                     var spray = player.gameObject.AddComponent<ItemSpray>();
                     spray.Use(player);
                     Destroy(spray);
                     break;
                 default:
-                    Debug.Log($"{itemName} 사용 스크립트 없음");
+                    Debug.LogError($"{itemName} no Script");
                     break;
             }
         }

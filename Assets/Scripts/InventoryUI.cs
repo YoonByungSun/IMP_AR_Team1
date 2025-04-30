@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Function: Inventory UI
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI Instance;

@@ -130,7 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee3fb12f688f38438ba4ac419374b9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Spray
+  itemName: GenericItem
+  itemIcon: {fileID: 0}
   rotateSpeed: {x: 45, y: 90, z: 30}
 --- !u!114 &-5564637102451604207
 MonoBehaviour:
@@ -144,4 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aeabd8b3c9954f4b9b2cc9509708bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemName: GenericItem
+  itemIcon: {fileID: 0}
+  rotateSpeed: {x: 45, y: 90, z: 30}
   radius: 2

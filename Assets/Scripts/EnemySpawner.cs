@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,6 +27,17 @@ public class EnemySpawner : MonoBehaviour
 
             yield return null;
         }
+
+        // room 생성 전에 적 생성 안되도록 수정 2025-04-30
+        while (roomTransform == null)
+        {
+            GameObject roomObj = GameObject.FindWithTag("Room");
+            if (roomObj != null)
+                roomTransform = roomObj.transform;
+
+            yield return null;
+        }
+
 
         string currentScene = SceneManager.GetActiveScene().name;
 

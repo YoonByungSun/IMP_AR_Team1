@@ -107,6 +107,3 @@ public class UIManager : MonoBehaviour
         Debug.Log("게임 종료 (빌드에서만 작동)");
     }
 }
-
-
-

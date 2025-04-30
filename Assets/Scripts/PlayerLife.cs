@@ -1,12 +1,23 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class PlayerLife : MonoBehaviour
 {
     public int life = 3;
-    public Image[] hearts; // 하트 이미지 배열
-    public GameObject gameOverUI; // Game Over 텍스트 + 버튼들을 담은 부모
+    //public Image[] hearts; // 하트 이미지 배열
+
+    private GameObject[] hearts;
+
+    void Start()
+    {
+        hearts[0] = GameObject.Find("Heart1");
+        hearts[1] = GameObject.Find("Heart2");
+        hearts[2] = GameObject.Find("Heart3");
+    }
+
+    private void Update()
+    {
+        if (life < 0) GameOver();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,21 +30,13 @@ public class PlayerLife : MonoBehaviour
     void TakeDamage()
     {
         life--;
-
-        if (life >= 0 && life < hearts.Length)
-        {
-            hearts[life].enabled = false; // 하트 하나 끄기
-        }
-
-        if (life <= 0)
-        {
-            GameOver();
-        }
+        hearts[life].gameObject.SetActive(false);
     }
 
     void GameOver()
     {
-        gameOverUI.SetActive(true);
+
+        GameObject.Find("GameOverUI").SetActive(true);
         Time.timeScale = 0f; // 게임 일시정지
     }
 }

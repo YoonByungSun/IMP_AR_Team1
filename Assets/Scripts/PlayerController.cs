@@ -4,13 +4,15 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float scale = 1f;
-   
+
     public GameObject fkillerEffect;
+    public GameObject gameOverUI;  // GameOver UI 오브젝트 연결용
 
     private bool isFkillerActive = false;
     private bool isDead = false;
     private int bossKillCount = 0;
     private GameObject spawnedPlayer;
+
     void Start()
     {
         string currentScene = SceneManager.GetActiveScene().name;
@@ -20,11 +22,9 @@ public class PlayerController : MonoBehaviour
         {
             scale = PlayerData.Instance.savedScale;
             transform.localScale = new Vector3(scale, scale, scale);
-            Debug.Log($"📌 PlayerController: savedScale 적용됨 = {scale}");
+            Debug.Log($"savedScale 적용됨 = {scale}");
         }
     }
-
-
 
     void OnTriggerEnter(Collider other)
     {
@@ -44,30 +44,30 @@ public class PlayerController : MonoBehaviour
             switch (enemy.enemyType)
             {
                 case EnemyController.EnemyType.Mushnub:
-                    Debug.Log("✅ Mushnub과 충돌 → ScaleUp");
-                    ScaleUp(0.002f);
+                    Debug.Log("Mushnub과 충돌 → ScaleUp");
+                    ScaleUp(0.01f);
                     Destroy(other.gameObject);
                     break;
 
                 case EnemyController.EnemyType.GreenBlob:
-                    Debug.Log("🟢 GreenBlob과 충돌");
-                    if (scale >= 0.03f)
+                    Debug.Log("GreenBlob과 충돌");
+                    if (scale >= 0.06f)
                     {
-                        ScaleUp(0.002f);
+                        ScaleUp(0.02f);
                         Destroy(other.gameObject);
                     }
                     else
                     {
-                        Debug.Log("🛑 GreenBlob 조건 미달 → GameOver");
+                        Debug.Log("GreenBlob 조건 미달 → GameOver");
                         GameOver();
                     }
                     break;
 
                 case EnemyController.EnemyType.AlienBlob:
-                    Debug.Log("👽 AlienBlob과 충돌");
-                    if (scale >= 0.06f)
+                    Debug.Log("AlienBlob과 충돌");
+                    if (scale >= 0.2f)
                     {
-                        ScaleUp(0.005f);
+                        ScaleUp(0.03f);
                         Destroy(other.gameObject);
                     }
                     else
@@ -77,23 +77,29 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 default:
-                    Debug.LogError("❗알 수 없는 enemyType");
+                    Debug.LogError("알 수 없는 enemyType");
                     break;
             }
         }
-    
-
 
         if (other.CompareTag("Boss"))
         {
-            if (scale >= 0.15f)
+            if (scale >= 0.35f)
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
 
                 if (bossKillCount >= 2)
                 {
-                    SceneManager.LoadScene("GameClearScene");
+                    var uiManager = FindObjectOfType<UIManager>();
+                    if (uiManager != null)
+                    {
+                        uiManager.ShowGameClearUI();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("UIManager를 찾을 수 없습니다.");
+                    }
                 }
             }
             else
@@ -114,26 +120,31 @@ public class PlayerController : MonoBehaviour
         if (PlayerData.Instance != null)
         {
             PlayerData.Instance.savedScale = scale;
-            Debug.Log($"✅ 스케일 저장됨: {scale}");
+            Debug.Log($"스케일 저장됨: {scale}");
         }
 
         string currentScene = SceneManager.GetActiveScene().name;
 
-        if (scale >= 0.03f && currentScene == "Stage1")
+        if (scale >= 0.06f && currentScene == "Stage1")
             SceneManager.LoadScene("Stage2");
-        else if (scale >= 0.06f && currentScene == "Stage2")
+        else if (scale >= 0.2f && currentScene == "Stage2")
             SceneManager.LoadScene("Stage3");
-        
     }
-
-
-
 
     void GameOver()
     {
         if (isDead) return;
         isDead = true;
-        SceneManager.LoadScene("GameOverScene");
+
+        if (gameOverUI != null)
+        {
+            gameOverUI.SetActive(true);
+            Time.timeScale = 0f;  // 게임 일시정지
+        }
+        else
+        {
+            Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
+        }
     }
 
     //public void ActivateFkiller()
@@ -151,3 +162,5 @@ public class PlayerController : MonoBehaviour
     //        fkillerEffect.SetActive(false);
     //}
 }
+
+

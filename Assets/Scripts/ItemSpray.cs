@@ -1,10 +1,11 @@
 using UnityEngine;
 
+// Function: Spray Item
 public class ItemSpray : ItemGeneric
 {
     public float radius = 2.0f;
 
-    private void Reset()
+    protected override void Reset()
     {
         itemName = "Spray";
     }

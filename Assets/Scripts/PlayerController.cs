@@ -57,8 +57,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log("GreenBlob 조건 미달 → GameOver");
-                        GameManager.Instance.GameOver();
+                        PlayerLife.Instance.TakeDamage();
                     }
                     break;
 
@@ -71,7 +70,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        GameManager.Instance.GameOver();
+                        PlayerLife.Instance.TakeDamage();
                     }
                     break;
 
@@ -87,24 +86,11 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
-
                 if (bossKillCount >= 2)
-                {
-                    var uiManager = FindObjectOfType<UIManager>();
-                    if (uiManager != null)
-                    {
-                        uiManager.ShowGameClearUI();
-                    }
-                    else
-                    {
-                        Debug.LogWarning("UIManager를 찾을 수 없습니다.");
-                    }
-                }
+                    GameManager.Instance.GameClear();
             }
             else
-            {
                 GameManager.Instance.GameOver();
-            }
         }
     }
 

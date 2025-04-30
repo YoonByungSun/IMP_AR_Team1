@@ -37,4 +37,8 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    public void InitScale()
+    {
+        savedScale = 0.01f;
+    }
 }

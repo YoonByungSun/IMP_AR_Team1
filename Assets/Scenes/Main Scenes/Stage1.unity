@@ -278,7 +278,7 @@ MonoBehaviour:
       m_Calls: []
   m_SerializedLibrary: {fileID: 11400000, guid: 2d5fcf7b1c1d47c4da42faf149f384a2, type: 2}
   m_MaxNumberOfMovingImages: 0
-  m_TrackedImagePrefab: {fileID: 5472329498920559631, guid: 3d13a74a362910d4e9ac6bd945bfb0b5, type: 3}
+  m_TrackedImagePrefab: {fileID: 3411213236074511698, guid: 3d13a74a362910d4e9ac6bd945bfb0b5, type: 3}
 --- !u!114 &32289483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1105,8 +1105,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870979736}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09777198, y: -2.5555532, z: 2.8328826}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09777188, y: -2.5555532, z: 2.8328826}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1165,6 +1165,9 @@ SceneRoots:
   - {fileID: 32289484}
   - {fileID: 28187895}
   - {fileID: 1595443536}
-  - {fileID: 1870979738}
   - {fileID: 1987025345}
+<<<<<<< HEAD
   - {fileID: 501602106}
+=======
+  - {fileID: 1870979738}
+>>>>>>> main

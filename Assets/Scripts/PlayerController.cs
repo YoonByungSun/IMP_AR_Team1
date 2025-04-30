@@ -1,153 +1,121 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    public float scale = 1f;
-   
-    public GameObject fkillerEffect;
+    [Header("UI Panels")]
+    public GameObject gameOverUI;
+    public GameObject gameClearUI;
+    public GameObject menuPanel;  // 시작 시 타이틀 역할
 
-    private bool isFkillerActive = false;
-    private bool isDead = false;
-    private int bossKillCount = 0;
-    private GameObject spawnedPlayer;
+    [Header("Buttons")]
+    public GameObject retryButton;
+    public GameObject exitButton_GameOver;
+    public GameObject returnToTitleButton;
+    public GameObject exitButton_Clear;
+
     void Start()
     {
-        string currentScene = SceneManager.GetActiveScene().name;
+        // 시작 시 UI 상태 설정
+        if (gameOverUI != null) gameOverUI.SetActive(false);
+        if (gameClearUI != null) gameClearUI.SetActive(false);
+        if (menuPanel != null) menuPanel.SetActive(true);
 
-        // Stage1이 아닐 때만 저장된 스케일 적용
-        if (currentScene != "Stage1" && PlayerData.Instance != null)
+        // 버튼 이벤트 연결
+        if (retryButton != null)
+            retryButton.GetComponent<Button>().onClick.AddListener(OnRetryClicked);
+
+        if (exitButton_GameOver != null)
+            exitButton_GameOver.GetComponent<Button>().onClick.AddListener(OnExitClicked);
+
+        if (returnToTitleButton != null)
+            returnToTitleButton.GetComponent<Button>().onClick.AddListener(OnReturnToTitleClicked);
+
+        if (exitButton_Clear != null)
+            exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
+
+        // PlayerController 연결 (게임 오버 시 UI 호출용)
+        var playerController = FindObjectOfType<PlayerController>();
+        if (playerController != null)
         {
-            scale = PlayerData.Instance.savedScale;
-            transform.localScale = new Vector3(scale, scale, scale);
-            Debug.Log($"📌 PlayerController: savedScale 적용됨 = {scale}");
+            playerController.gameOverUI = gameOverUI;
+        }
+
+        // PlayerLife 연결 (라이프 시스템 게임 오버 UI용)
+        var playerLife = FindObjectOfType<PlayerLife>();
+        if (playerLife != null)
+        {
+            playerLife.gameOverUI = gameOverUI;
         }
     }
 
-
-
-    void OnTriggerEnter(Collider other)
+    public void StartGame()
     {
-        Debug.Log($"[충돌 발생] other.name = {other.name}, tag = {other.tag}");
+        Time.timeScale = 1f;
 
-        if (other.CompareTag("Enemy"))
-        {
-            EnemyController enemy = other.GetComponent<EnemyController>();
-            if (enemy == null)
-            {
-                Debug.LogWarning("Enemy 태그인데 EnemyController가 없음");
-                return;
-            }
+        // 타이틀 메뉴 숨기고 게임 시작
+        if (menuPanel != null)
+            menuPanel.SetActive(false);
 
-            Debug.Log($"[EnemyController 확인] enemyType = {enemy.enemyType}");
-
-            switch (enemy.enemyType)
-            {
-                case EnemyController.EnemyType.Mushnub:
-                    Debug.Log("✅ Mushnub과 충돌 → ScaleUp");
-                    ScaleUp(0.01f);
-                    Destroy(other.gameObject);
-                    break;
-
-                case EnemyController.EnemyType.GreenBlob:
-                    Debug.Log("🟢 GreenBlob과 충돌");
-                    if (scale >= 0.06f)
-                    {
-                        ScaleUp(0.02f);
-                        Destroy(other.gameObject);
-                    }
-                    else
-                    {
-                        Debug.Log("🛑 GreenBlob 조건 미달 → GameOver");
-                        GameOver();
-                    }
-                    break;
-
-                case EnemyController.EnemyType.AlienBlob:
-                    Debug.Log("👽 AlienBlob과 충돌");
-                    if (scale >= 0.2f)
-                    {
-                        ScaleUp(0.03f);
-                        Destroy(other.gameObject);
-                    }
-                    else
-                    {
-                        GameOver();
-                    }
-                    break;
-
-                default:
-                    Debug.LogError("❗알 수 없는 enemyType");
-                    break;
-            }
-        }
-    
-
-
-        if (other.CompareTag("Boss"))
-        {
-            if (scale >= 0.35f)
-            {
-                Destroy(other.gameObject);
-                bossKillCount++;
-
-                if (bossKillCount >= 2)
-                {
-                    SceneManager.LoadScene("GameClearScene");
-                }
-            }
-            else
-            {
-                GameOver();
-            }
-        }
+        // Stage1 씬 Additive 로드
+        SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
     }
 
-    void ScaleUp(float amount)
+    public void ShowGameOverUI()
     {
-        scale = Mathf.Min(scale + amount, 1.0f); // 최대 크기 제한은 네가 정하기 나름
-
-        transform.localScale = new Vector3(scale, scale, scale);  // 실제 크기로 적용
-        transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
-
-        // 저장
-        if (PlayerData.Instance != null)
+        if (gameOverUI != null)
         {
-            PlayerData.Instance.savedScale = scale;
-            Debug.Log($"✅ 스케일 저장됨: {scale}");
+            gameOverUI.SetActive(true);
+            Time.timeScale = 0f;
         }
-
-        string currentScene = SceneManager.GetActiveScene().name;
-
-        if (scale >= 0.06f && currentScene == "Stage1")
-            SceneManager.LoadScene("Stage2");
-        else if (scale >= 0.2f && currentScene == "Stage2")
-            SceneManager.LoadScene("Stage3");
-        
     }
 
-
-
-
-    void GameOver()
+    public void ShowGameClearUI()
     {
-        if (isDead) return;
-        isDead = true;
-        SceneManager.LoadScene("GameOverScene");
+        if (gameClearUI != null)
+        {
+            gameClearUI.SetActive(true);
+            Time.timeScale = 0f;
+        }
     }
 
-    //public void ActivateFkiller()
-    //{
-    //    isFkillerActive = true;
-    //    if (fkillerEffect != null)
-    //        fkillerEffect.SetActive(true);
-    //    Invoke("DeactivateFkiller", 5f);
-    //}
+    public void OnRetryClicked()
+    {
+        Time.timeScale = 1f;
 
-    //void DeactivateFkiller()
-    //{
-    //    isFkillerActive = false;
-    //    if (fkillerEffect != null)
-    //        fkillerEffect.SetActive(false);
-    //}
+        // 현재 활성 씬 다시 로드 (UI는 유지됨)
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name != "UI")
+        {
+            SceneManager.UnloadSceneAsync(currentScene.name);
+            SceneManager.LoadScene(currentScene.name, LoadSceneMode.Additive);
+        }
+    }
+
+    public void OnReturnToTitleClicked()
+    {
+        Time.timeScale = 1f;
+
+        // 게임 UI 숨기고 메뉴 다시 표시
+        if (gameClearUI != null) gameClearUI.SetActive(false);
+        if (gameOverUI != null) gameOverUI.SetActive(false);
+        if (menuPanel != null) menuPanel.SetActive(true);
+
+        // 현재 게임 씬 언로드 (UI는 남겨둠)
+        var currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name != "UI")
+        {
+            SceneManager.UnloadSceneAsync(currentScene.name);
+        }
+    }
+
+    public void OnExitClicked()
+    {
+        Application.Quit();
+        Debug.Log("게임 종료 (빌드 환경에서만 종료됩니다)");
+    }
 }
+
+
+

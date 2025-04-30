@@ -16,7 +16,7 @@ public class PlayerLife : MonoBehaviour
 
     private void Update()
     {
-        if (life < 0) GameOver();
+        if (life < 0) GameManager.Instance.GameOver();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -27,17 +27,17 @@ public class PlayerLife : MonoBehaviour
         }
     }
 
-    void TakeDamage()
+    private void TakeDamage()
     {
         life--;
         hearts[life].gameObject.SetActive(false);
     }
 
-    void GameOver()
-    {
+    //void GameOver()
+    //{
 
-        GameObject.Find("GameOverUI").SetActive(true);
-        Time.timeScale = 0f; // 게임 일시정지
-    }
+    //    GameObject.Find("GameOverUI").SetActive(true);
+    //    Time.timeScale = 0f; // 게임 일시정지
+    //}
 }
 

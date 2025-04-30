@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
                     else
                     {
                         Debug.Log("GreenBlob 조건 미달 → GameOver");
-                        GameOver();
+                        GameManager.Instance.GameOver();
                     }
                     break;
 
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
                     }
                     else
                     {
-                        GameOver();
+                        GameManager.Instance.GameOver();
                     }
                     break;
 
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                GameOver();
+                GameManager.Instance.GameOver();
             }
         }
     }
@@ -132,21 +132,21 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void GameOver()
-    {
-        if (isDead) return;
-        isDead = true;
+    //void GameOver()
+    //{
+    //    if (isDead) return;
+    //    isDead = true;
 
-        if (gameOverUI != null)
-        {
-            gameOverUI.SetActive(true);
-            Time.timeScale = 0f;  // 게임 일시정지
-        }
-        else
-        {
-            Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
-        }
-    }
+    //    if (gameOverUI != null)
+    //    {
+    //        gameOverUI.SetActive(true);
+    //        Time.timeScale = 0f;  // 게임 일시정지
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
+    //    }
+    //}
     private bool IsSceneLoaded(string sceneName)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)

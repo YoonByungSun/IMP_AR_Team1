@@ -36,14 +36,14 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void TriggerGameOver()
+    public void GameOver()
     {
         if (isGameOver) return;
 
         isGameOver = true;
         Debug.Log("Game Over");
 
-        Time.timeScale = 0f;
+        UIManager.Instance.ShowGameOverUI();
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;

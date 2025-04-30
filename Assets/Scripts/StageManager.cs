@@ -7,8 +7,6 @@ public class StageManager : MonoBehaviour
     public Text stage2Text;
     public Text stage3Text;
 
-    public Text gameClearText; // Game Clear! 텍스트 오브젝트
-
     public int currentStage = 1;
 
     private readonly Color activeColor = new Color32(0xFF, 0x83, 0x9E, 0xFF);  // #FF839E
@@ -18,11 +16,6 @@ public class StageManager : MonoBehaviour
     {
         InitStageTexts();
         UpdateStageUI();
-
-        if (gameClearText != null)
-        {
-            gameClearText.gameObject.SetActive(false); // 시작 시 비활성화
-        }
     }
 
     public void NextStage()

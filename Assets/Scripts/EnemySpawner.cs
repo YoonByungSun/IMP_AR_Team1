@@ -39,17 +39,16 @@ public class EnemySpawner : MonoBehaviour
         }
 
 
-        string currentScene = SceneManager.GetActiveScene().name;
-
-        if (currentScene == "Stage1" || currentScene == "Stage2")
+        if (IsSceneLoaded("Stage1") || IsSceneLoaded("Stage2"))
         {
             StartCoroutine(SpawnEnemiesUntilScaleLimit());
         }
-        else if (currentScene == "Stage3")
+        else if (IsSceneLoaded("Stage3"))
         {
             StartCoroutine(SpawnEnemiesUntilScaleLimit());
             SpawnBosses();
         }
+
     }
 
     IEnumerator SpawnEnemiesUntilScaleLimit()
@@ -60,13 +59,14 @@ public class EnemySpawner : MonoBehaviour
         {
             float scale = PlayerData.Instance != null ? PlayerData.Instance.savedScale : 0f;
 
-            if ((currentScene == "Stage1" && scale >= 0.06f) ||
-                (currentScene == "Stage2" && scale >= 0.2f) ||
-                (currentScene == "Stage3" && scale >= 0.5f))
+            if ((IsSceneLoaded("Stage1") && scale >= 0.06f) ||
+                (IsSceneLoaded("Stage2") && scale >= 0.2f) ||
+                (IsSceneLoaded("Stage3") && scale >= 0.5f))
             {
                 Debug.Log("[EnemySpawner] Scale condition met. Stopping enemy spawn.");
                 yield break;
             }
+
 
             SpawnEnemies(6, 7);
             yield return new WaitForSeconds(3f);
@@ -129,5 +129,16 @@ public class EnemySpawner : MonoBehaviour
             }
         }
     }
+
+    private bool IsSceneLoaded(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name == sceneName)
+                return true;
+        }
+        return false;
+    }
+
 }
 

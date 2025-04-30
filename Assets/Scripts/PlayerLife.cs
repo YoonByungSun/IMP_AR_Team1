@@ -36,17 +36,5 @@ public class PlayerLife : MonoBehaviour
         gameOverUI.SetActive(true);
         Time.timeScale = 0f; // 게임 일시정지
     }
-
-    public void Retry()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void ExitToMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MenuPanel"); // 메뉴 씬 이름에 맞게 수정
-    }
 }
 

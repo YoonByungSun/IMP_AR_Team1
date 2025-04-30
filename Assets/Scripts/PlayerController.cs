@@ -121,11 +121,11 @@ public class PlayerController : MonoBehaviour
         }
 
         // 스테이지 전환 조건 체크 및 처리
-        if (scale >= 0.06f && IsSceneLoaded("Stage1"))
+        if (scale >= 0.03f && IsSceneLoaded("Stage1"))
         {
             StartCoroutine(SwitchStage("Stage1", "Stage2"));
         }
-        else if (scale >= 0.2f && IsSceneLoaded("Stage2"))
+        else if (scale >= 0.06f && IsSceneLoaded("Stage2"))
         {
             StartCoroutine(SwitchStage("Stage2", "Stage3"));
         }

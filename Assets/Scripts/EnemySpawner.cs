@@ -95,24 +95,22 @@ public class EnemySpawner : MonoBehaviour
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
         if (!spawned) return;
 
-        Bounds bounds = roomCollider.bounds;
-        Vector3 roomMin = bounds.min;
-        Vector3 roomMax = bounds.max;
-        float yPos = PlayerSpawner.fixedPlayerY; // ✅ 플레이어 Y 위치 고정값 사용
+        Vector3 roomCenter = roomTransform.position;
+        Vector3 roomSize = roomTransform.localScale;
 
+        float yPos = PlayerSpawner.fixedPlayerY;
         int count = Random.Range(minSpawn, maxSpawn + 1);
 
         for (int i = 0; i < count; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin),
+                Random.Range(roomCenter.x - roomSize.x / 2f + spawnMargin, roomCenter.x + roomSize.x / 2f - spawnMargin),
                 yPos,
-                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)
+                Random.Range(roomCenter.z - roomSize.z / 2f + spawnMargin, roomCenter.z + roomSize.z / 2f - spawnMargin)
             );
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject enemy = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);
-            enemy.transform.parent = spawned.transform;
 
             if (enemy.TryGetComponent(out EnemyController ec) && player != null)
             {
@@ -126,17 +124,17 @@ public class EnemySpawner : MonoBehaviour
         if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
-        Bounds bounds = roomCollider.bounds;
-        Vector3 roomMin = bounds.min;
-        Vector3 roomMax = bounds.max;
-        float yPos = PlayerSpawner.fixedPlayerY; // ✅ boss도 같은 Y 위치
+        Vector3 roomCenter = roomTransform.position;
+        Vector3 roomSize = roomTransform.localScale;
+
+        float yPos = PlayerSpawner.fixedPlayerY;
 
         for (int i = 0; i < 2; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin),
+                Random.Range(roomCenter.x - roomSize.x / 2f + spawnMargin, roomCenter.x + roomSize.x / 2f - spawnMargin),
                 yPos,
-                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)
+                Random.Range(roomCenter.z - roomSize.z / 2f + spawnMargin, roomCenter.z + roomSize.z / 2f - spawnMargin)
             );
 
             GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);

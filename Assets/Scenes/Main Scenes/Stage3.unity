@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &28187893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +260,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &32289482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429de5d3deaf07e428437382ec87a7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPrefab: {fileID: 4866870555864836632, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
+  roomPrefab: {fileID: 0}
 --- !u!1 &72919859
 GameObject:
   m_ObjectHideFlags: 0
@@ -732,7 +732,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1595443534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -791,7 +791,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1870979737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -804,6 +804,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7fb3dc4bc6a37b4cb34845a5f20e7b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inGameUI: {fileID: 0}
+  gameOverUI: {fileID: 0}
+  gameClearUI: {fileID: 0}
+  menuPanel: {fileID: 0}
+  retryButton: {fileID: 0}
+  exitButton_GameOver: {fileID: 0}
+  returnToTitleButton: {fileID: 0}
+  exitButton_Clear: {fileID: 0}
 --- !u!4 &1870979738
 Transform:
   m_ObjectHideFlags: 0
@@ -835,7 +843,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1878915868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -851,8 +859,11 @@ MonoBehaviour:
   itemPrefabs:
   - {fileID: 4145092231003505334, guid: 57a26066698e10b4a88897cb5185da53, type: 3}
   roomTransform: {fileID: 1303534709589248774, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
-  spawnCount: 5
   spawnMargin: 0.3
+  maxCount: 5
+  minDelay: 1
+  maxDelay: 5
+  spawnRate: 0.5
 --- !u!4 &1878915869
 Transform:
   m_ObjectHideFlags: 0

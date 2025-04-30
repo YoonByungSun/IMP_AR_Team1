@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Function: Inventory UI
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI Instance;
-    public Transform itemListParent;
-    public GameObject itemSlotPrefab;
-    public Sprite emptySlotSprite;  // [추가] 빈 슬롯 기본 이미지
+
+    public Transform canvasParent;        // ex: Canvas 오브젝트
+    public GameObject itemBoxPrefab;      // ex: ItemBox 프리팹
+    public Sprite emptySlotSprite;        // 빈 슬롯일 때 기본 아이콘
 
     private List<GameObject> itemSlots = new List<GameObject>();
 
@@ -20,6 +20,7 @@ public class InventoryUI : MonoBehaviour
 
     public void RefreshUI()
     {
+        // 기존 슬롯 삭제
         foreach (var slot in itemSlots)
         {
             Destroy(slot);
@@ -27,30 +28,27 @@ public class InventoryUI : MonoBehaviour
         itemSlots.Clear();
 
         var items = Inventory.Instance.GetAllItems();
+
         for (int i = 0; i < items.Count; i++)
         {
             int idx = i;
-
-            var slot = Instantiate(itemSlotPrefab, itemListParent);
+            var slot = Instantiate(itemBoxPrefab, canvasParent);
             itemSlots.Add(slot);
 
+            // 아이콘 설정
+            var icon = slot.transform.Find("ItemIcon")?.GetComponent<Image>();
+            if (icon != null && items[idx].icon != null)
+                icon.sprite = items[idx].icon;
+
             // 수량 텍스트 설정
-            Text txt = slot.GetComponentInChildren<Text>();
-            if (txt)
-                txt.text = $"X {items[idx].count}";
+            var countText = slot.transform.Find("ItemCountText")?.GetComponent<Text>();
+            if (countText != null)
+                countText.text = $"X {items[idx].count}";
 
-            // 아이콘 이미지 설정
-            Image img = slot.GetComponentInChildren<Image>();
-            if (img)
-            {
-                if (items[idx].icon != null)
-                    img.sprite = items[idx].icon;
-            }
-
-            // 버튼 클릭 설정
-            Button btn = slot.GetComponent<Button>();
-            if (btn != null)
-                btn.onClick.AddListener(() =>
+            // 버튼 설정
+            var button = slot.transform.Find("ItemButton")?.GetComponent<Button>();
+            if (button != null)
+                button.onClick.AddListener(() =>
                 {
                     var player = FindAnyObjectByType<PlayerController>()?.transform;
                     if (player != null)
@@ -58,39 +56,28 @@ public class InventoryUI : MonoBehaviour
                 });
         }
 
-        // 인벤토리에 아이템이 하나도 없으면 빈 슬롯 표시
+        // 빈 슬롯 처리
         if (items.Count == 0)
         {
-            var emptySlot = Instantiate(itemSlotPrefab, itemListParent);
+            var emptySlot = Instantiate(itemBoxPrefab, canvasParent);
             itemSlots.Add(emptySlot);
 
-            Text txt = emptySlot.GetComponentInChildren<Text>();
-            if (txt) txt.text = "";
+            var icon = emptySlot.transform.Find("ItemIcon")?.GetComponent<Image>();
+            if (icon != null)
+                icon.sprite = emptySlotSprite;
 
-            Image img = emptySlot.GetComponentInChildren<Image>();
-            if (img) img.sprite = emptySlotSprite;
-        }
-    }
+            var countText = emptySlot.transform.Find("ItemCountText")?.GetComponent<Text>();
+            if (countText != null)
+                countText.text = "";
 
-    public void UpdateSingleItemUI(string itemName, int newCount)
-    {
-        foreach (var slot in itemSlots)
-        {
-            Text txt = slot.GetComponentInChildren<Text>();
-            if (txt != null && txt.text.Contains(itemName))
-            {
-                if (newCount > 0)
-                {
-                    txt.text = $"X {newCount}";
-                }
-                else
-                {
-                    // 수량이 0이면 전체 새로 그리기
-                    RefreshUI();
-                }
-                return;
-            }
+            // 버튼 비활성화 (클릭 방지)
+            var button = emptySlot.transform.Find("ItemButton")?.GetComponent<Button>();
+            if (button != null)
+                button.interactable = false;
         }
     }
 }
+
+
+
 

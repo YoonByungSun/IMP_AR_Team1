@@ -11,7 +11,7 @@ public class Inventory : MonoBehaviour
     {
         public string name;
         public int count;
-        public Sprite icon;  // [추가] 아이콘 저장
+        public Sprite icon;
 
         public Item(string name, int count = 1, Sprite icon = null)
         {
@@ -40,12 +40,10 @@ public class Inventory : MonoBehaviour
             items.Add(new Item(itemName, 1, itemIcon));
         }
 
-        InventoryUI.Instance?.UpdateSingleItemUI(itemName, items[idx != -1 ? idx : items.Count - 1].count);
-
-
+        InventoryUI.Instance?.RefreshUI();
     }
 
-    // For UI only, Use() function in each Item Script, ItemGeneric.cs
+    // 아이템 사용
     public void UseItem(int index, Transform player)
     {
         if (index < 0 || index >= items.Count) return;
@@ -61,13 +59,12 @@ public class Inventory : MonoBehaviour
             switch (itemName)
             {
                 case "Spray":
-                    // 인벤토리 내 아이템 아이콘에도 ItemSpray.cs 있어야함
                     var spray = player.gameObject.AddComponent<ItemSpray>();
                     spray.Use(player);
                     Destroy(spray);
                     break;
                 default:
-                    Debug.LogError($"{itemName} no Script");
+                    Debug.LogError($"{itemName} has no usable script.");
                     break;
             }
         }
@@ -88,3 +85,5 @@ public class Inventory : MonoBehaviour
         return new List<Item>(items);
     }
 }
+
+

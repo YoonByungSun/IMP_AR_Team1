@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -111,25 +112,27 @@ public class PlayerController : MonoBehaviour
 
     void ScaleUp(float amount)
     {
-        scale = Mathf.Min(scale + amount, 1.0f); // 최대 크기 제한은 네가 정하기 나름
-
-        transform.localScale = new Vector3(scale, scale, scale);  // 실제 크기로 적용
+        scale = Mathf.Min(scale + amount, 1.0f);
+        transform.localScale = new Vector3(scale, scale, scale);
         transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
 
-        // 저장
         if (PlayerData.Instance != null)
         {
             PlayerData.Instance.savedScale = scale;
             Debug.Log($"스케일 저장됨: {scale}");
         }
 
-        string currentScene = SceneManager.GetActiveScene().name;
-
-        if (scale >= 0.06f && currentScene == "Stage1")
-            SceneManager.LoadScene("Stage2");
-        else if (scale >= 0.2f && currentScene == "Stage2")
-            SceneManager.LoadScene("Stage3");
+        // 스테이지 전환 조건 체크 및 처리
+        if (scale >= 0.06f && IsSceneLoaded("Stage1"))
+        {
+            StartCoroutine(SwitchStage("Stage1", "Stage2"));
+        }
+        else if (scale >= 0.2f && IsSceneLoaded("Stage2"))
+        {
+            StartCoroutine(SwitchStage("Stage2", "Stage3"));
+        }
     }
+
 
     void GameOver()
     {
@@ -146,6 +149,33 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
         }
     }
+    private bool IsSceneLoaded(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name == sceneName)
+                return true;
+        }
+        return false;
+    }
+
+    private IEnumerator SwitchStage(string prevScene, string nextScene)
+    {
+        // 이전 스테이지 언로드
+        if (IsSceneLoaded(prevScene))
+        {
+            Debug.Log($"[Stage 전환] {prevScene} 언로드");
+            yield return SceneManager.UnloadSceneAsync(prevScene);
+        }
+
+        // 다음 스테이지 로드
+        if (!IsSceneLoaded(nextScene))
+        {
+            Debug.Log($"[Stage 전환] {nextScene} 로드");
+            yield return SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Additive);
+        }
+    }
+
 
     //public void ActivateFkiller()
     //{

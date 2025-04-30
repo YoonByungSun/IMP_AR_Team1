@@ -821,6 +821,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7fb3dc4bc6a37b4cb34845a5f20e7b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inGameUI: {fileID: 0}
+  gameOverUI: {fileID: 0}
+  gameClearUI: {fileID: 0}
+  menuPanel: {fileID: 0}
+  retryButton: {fileID: 0}
+  exitButton_GameOver: {fileID: 0}
+  returnToTitleButton: {fileID: 0}
+  exitButton_Clear: {fileID: 0}
 --- !u!4 &1870979738
 Transform:
   m_ObjectHideFlags: 0
@@ -852,7 +860,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1883814370
 Transform:
   m_ObjectHideFlags: 0

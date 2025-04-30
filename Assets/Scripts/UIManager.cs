@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
+
     [Header("UI Panels")]
     public GameObject inGameUI;
     public GameObject gameOverUI;
@@ -61,19 +63,13 @@ public class UIManager : MonoBehaviour
     public void ShowGameOverUI()
     {
         if (gameOverUI != null)
-        {
             gameOverUI.SetActive(true);
-            Time.timeScale = 0f;
-        }
     }
 
     public void ShowGameClearUI()
     {
         if (gameClearUI != null)
-        {
             gameClearUI.SetActive(true);
-            Time.timeScale = 0f;
-        }
     }
 
     // === 버튼용 public 함수들 (OnClick에서 직접 연결 가능) ===

@@ -2287,9 +2287,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inGameUI: {fileID: 548748810}
-  gameOverUI: {fileID: 301801326}
-  gameClearUI: {fileID: 891546761}
-  menuPanel: {fileID: 1539723727}
+  overUI: {fileID: 301801326}
+  clearUI: {fileID: 891546761}
+  homeUI: {fileID: 1539723727}
   retryButton: {fileID: 7433778436907947773}
   exitButton_GameOver: {fileID: 6652278667097741265}
   returnToTitleButton: {fileID: 330871854}

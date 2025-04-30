@@ -5,10 +5,7 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - fkillerEffect: {instanceID: 0}
-  - heartPrefab: {instanceID: 0}
-  - heartParent: {instanceID: 0}
-  - retryButton: {fileID: 3585271252155460598, guid: 01b1ed5c1ac168d45aca4793b017b29e, type: 3}
-  - gameOverText: {fileID: 5474281098517846514, guid: 18fd39b60984cd041bfce7159d0c112e, type: 3}
+  - gameOverUI: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

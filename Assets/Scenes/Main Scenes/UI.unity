@@ -661,7 +661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5360664275111895323, guid: 01b1ed5c1ac168d45aca4793b017b29e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnReturnToTitleClicked
+      value: OnHomeClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5360664275111895323, guid: 01b1ed5c1ac168d45aca4793b017b29e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -1314,7 +1314,6 @@ RectTransform:
   - {fileID: 301801327}
   - {fileID: 891546762}
   - {fileID: 201037215}
-  - {fileID: 1638750120}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2439,54 +2438,6 @@ MonoBehaviour:
   itemListParent: {fileID: 148959829}
   itemSlotPrefab: {fileID: 919132149155446097, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
   emptySlotSprite: {fileID: 2193479657588290036, guid: c902e08bd83e04947b6e8d7f31f385be, type: 3}
---- !u!1 &1638750118
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1638750120}
-  - component: {fileID: 1638750119}
-  m_Layer: 0
-  m_Name: StageManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1638750119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1638750118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40366dd50a64a6e40b407c91594ff7ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stage1Text: {fileID: 1358685860}
-  stage2Text: {fileID: 623887433}
-  stage3Text: {fileID: 1444320461}
-  currentStage: 1
---- !u!4 &1638750120
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1638750118}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -300, y: 1085, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 605235629}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1684629479
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms.GameCenter;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -68,13 +67,19 @@ public class UIManager : MonoBehaviour
     public void OnReturnToTitleClicked()
     {
         Time.timeScale = 1f;
-        SetUI("home");
 
-        var currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name != "UI")
+        if (SceneManager.sceneCount != 1)
         {
-            SceneManager.UnloadSceneAsync(currentScene);
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name.StartsWith("Stage"))
+                    SceneManager.UnloadSceneAsync(scene);
+            }
         }
+
+        SetUI("home");
+        SceneManager.LoadSceneAsync("Stage1", LoadSceneMode.Additive);
     }
 
     public void OnExitClicked()

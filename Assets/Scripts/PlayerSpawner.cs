@@ -32,14 +32,14 @@ public class PlayerSpawner : MonoBehaviour
     {
         foreach (var addedImage in eventArgs.added)
         {
-            if (spawnedPlayer == null)
+            GameObject room = GameObject.Find("Room(Clone)");
+            if (spawnedPlayer == null && room != null)
             {
                 trackedImage = addedImage;
 
                 Vector3 markerPos = trackedImage.transform.position;
 
                 // ✅ Room이 있으면 Room 위에 생성
-                GameObject room = GameObject.Find("Room(Clone)");
                 float yOffset = 0.05f;
                 float baseY = markerPos.y;
 

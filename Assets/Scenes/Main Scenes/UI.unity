@@ -633,11 +633,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1836235115897361306, guid: 01b1ed5c1ac168d45aca4793b017b29e, type: 3}
       propertyPath: m_Text
-      value: Return to Title
+      value: HOME
       objectReference: {fileID: 0}
     - target: {fileID: 3585271252155460598, guid: 01b1ed5c1ac168d45aca4793b017b29e, type: 3}
       propertyPath: m_Name
-      value: RetrunToTitleButton
+      value: HomeButton
       objectReference: {fileID: 0}
     - target: {fileID: 3585271252155460598, guid: 01b1ed5c1ac168d45aca4793b017b29e, type: 3}
       propertyPath: m_IsActive
@@ -1504,9 +1504,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6142167}
   - {fileID: 330871853}
   - {fileID: 1297251565}
+  - {fileID: 6142167}
   m_Father: {fileID: 605235629}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2292,8 +2292,13 @@ MonoBehaviour:
   homeUI: {fileID: 1539723727}
   retryButton: {fileID: 7433778436907947773}
   exitButton_GameOver: {fileID: 6652278667097741265}
-  returnToTitleButton: {fileID: 330871854}
+  homeButton: {fileID: 330871854}
   exitButton_Clear: {fileID: 1297251566}
+  stage1Text: {fileID: 1358685860}
+  stage2Text: {fileID: 623887433}
+  stage3Text: {fileID: 1444320461}
+  a: {r: 1, g: 0.5137255, b: 0.61960787, a: 1}
+  b: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1529467527
 Transform:
   m_ObjectHideFlags: 0
@@ -2450,7 +2455,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1638750119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2669,6 +2674,10 @@ PrefabInstance:
     - target: {fileID: 646435144125312528, guid: 38dbc5c21ce2f0947829092887df7c2a, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5980385004056655808, guid: 38dbc5c21ce2f0947829092887df7c2a, type: 3}
+      propertyPath: m_Text
+      value: Game Clear !
       objectReference: {fileID: 0}
     - target: {fileID: 5980385004056655808, guid: 38dbc5c21ce2f0947829092887df7c2a, type: 3}
       propertyPath: m_FontData.m_MaxSize

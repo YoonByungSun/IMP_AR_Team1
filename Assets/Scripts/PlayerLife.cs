@@ -1,43 +1,35 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PlayerLife : MonoBehaviour
 {
+    public static PlayerLife Instance;
+
     public int life = 3;
-    //public Image[] hearts; // ÇÏÆ® ÀÌ¹ÌÁö ¹è¿­
 
-    private GameObject[] hearts;
-
-    void Start()
+    void Awake()
     {
-        hearts[0] = GameObject.Find("Heart1");
-        hearts[1] = GameObject.Find("Heart2");
-        hearts[2] = GameObject.Find("Heart3");
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
     }
 
-    private void Update()
-    {
-        if (life < 0) GameOver();
-    }
 
-    private void OnTriggerEnter(Collider other)
+    void Update()
     {
-        if (other.CompareTag("Enemy"))
+        if (life < 0)
         {
-            TakeDamage();
+            GameManager.Instance.GameOver(); // âœ… GameOver UIëŠ” GameManagerì—ì„œ ì²˜ë¦¬
         }
     }
 
-    void TakeDamage()
+    public void TakeDamage()
     {
         life--;
-        hearts[life].gameObject.SetActive(false);
-    }
 
-    void GameOver()
-    {
-
-        GameObject.Find("GameOverUI").SetActive(true);
-        Time.timeScale = 0f; // °ÔÀÓ ÀÏ½ÃÁ¤Áö
+        if (life >= 0)
+        {
+            GameObject heart = GameObject.Find("Heart" + (life + 1));
+            if (heart != null)
+                heart.SetActive(false);
+        }
     }
 }
-

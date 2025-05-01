@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,10 +10,7 @@ public class PlayerController : MonoBehaviour
     public GameObject fkillerEffect;
     public GameObject gameOverUI;  // GameOver UI 오브젝트 연결용
 
-    private bool isFkillerActive = false;
-    private bool isDead = false;
     private int bossKillCount = 0;
-    private GameObject spawnedPlayer;
 
     void Start()
     {
@@ -46,34 +44,33 @@ public class PlayerController : MonoBehaviour
             {
                 case EnemyController.EnemyType.Mushnub:
                     Debug.Log("Mushnub과 충돌 → ScaleUp");
-                    ScaleUp(0.01f);
+                    ScaleUp(0.002f);
                     Destroy(other.gameObject);
                     break;
 
                 case EnemyController.EnemyType.GreenBlob:
                     Debug.Log("GreenBlob과 충돌");
-                    if (scale >= 0.06f)
+                    if (scale >= 0.03f)
                     {
-                        ScaleUp(0.02f);
+                        ScaleUp(0.002f);
                         Destroy(other.gameObject);
                     }
                     else
                     {
-                        Debug.Log("GreenBlob 조건 미달 → GameOver");
-                        GameOver();
+                        PlayerLife.Instance.TakeDamage();
                     }
                     break;
 
                 case EnemyController.EnemyType.AlienBlob:
                     Debug.Log("AlienBlob과 충돌");
-                    if (scale >= 0.2f)
+                    if (scale >= 0.06f)
                     {
-                        ScaleUp(0.03f);
+                        ScaleUp(0.002f);
                         Destroy(other.gameObject);
                     }
                     else
                     {
-                        GameOver();
+                        PlayerLife.Instance.TakeDamage();
                     }
                     break;
 
@@ -85,28 +82,15 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Boss"))
         {
-            if (scale >= 0.35f)
+            if (scale >= 0.1f)
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
-
                 if (bossKillCount >= 2)
-                {
-                    var uiManager = FindObjectOfType<UIManager>();
-                    if (uiManager != null)
-                    {
-                        uiManager.ShowGameClearUI();
-                    }
-                    else
-                    {
-                        Debug.LogWarning("UIManager를 찾을 수 없습니다.");
-                    }
-                }
+                    GameManager.Instance.GameClear();
             }
             else
-            {
-                GameOver();
-            }
+                GameManager.Instance.GameOver();
         }
     }
 
@@ -123,32 +107,34 @@ public class PlayerController : MonoBehaviour
         }
 
         // 스테이지 전환 조건 체크 및 처리
-        if (scale >= 0.06f && IsSceneLoaded("Stage1"))
+        if (scale >= 0.03f && IsSceneLoaded("Stage1"))
         {
             StartCoroutine(SwitchStage("Stage1", "Stage2"));
+            UIManager.Instance.SetUI("Stage2");
         }
-        else if (scale >= 0.2f && IsSceneLoaded("Stage2"))
+        else if (scale >= 0.06f && IsSceneLoaded("Stage2"))
         {
             StartCoroutine(SwitchStage("Stage2", "Stage3"));
+            UIManager.Instance.SetUI("Stage3");
         }
     }
 
 
-    void GameOver()
-    {
-        if (isDead) return;
-        isDead = true;
+    //void GameOver()
+    //{
+    //    if (isDead) return;
+    //    isDead = true;
 
-        if (gameOverUI != null)
-        {
-            gameOverUI.SetActive(true);
-            Time.timeScale = 0f;  // 게임 일시정지
-        }
-        else
-        {
-            Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
-        }
-    }
+    //    if (gameOverUI != null)
+    //    {
+    //        gameOverUI.SetActive(true);
+    //        Time.timeScale = 0f;  // 게임 일시정지
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
+    //    }
+    //}
     private bool IsSceneLoaded(string sceneName)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)

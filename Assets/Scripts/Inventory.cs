@@ -55,14 +55,12 @@ public class Inventory : MonoBehaviour
         if (itemScript && itemScript.itemName == itemName)
         {
             itemScript.Use(player);
-            
         }
         else
         {
             switch (itemName)
             {
                 case "Spray":
-                    // �κ��丮 �� ������ �����ܿ��� ItemSpray.cs �־����
                     var spray = player.gameObject.AddComponent<ItemSpray>();
                     spray.Use(player);
                     Destroy(spray);
@@ -71,11 +69,7 @@ public class Inventory : MonoBehaviour
                     Debug.LogError($"{itemName} no Script");
                     break;
             }
-
-            var anim = player.GetComponent<PlayerAnimatorController>();
-            anim?.PlayCheer();
         }
-
         // ���� ����
         Item updatedItem = items[index];
         updatedItem.count--;

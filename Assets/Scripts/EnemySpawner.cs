@@ -11,7 +11,7 @@ public class EnemySpawner : MonoBehaviour
     private Transform player;
     private GameObject spawned;
 
-    public float spawnMargin = 0.3f;
+    public float spawnMargin = 0.15f;
 
     void Start()
     {
@@ -92,54 +92,72 @@ public class EnemySpawner : MonoBehaviour
     public void SpawnEnemies(int minSpawn = 1, int maxSpawn = 3)
     {
         if (player == null || roomTransform == null) return;
-        if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
-        if (!spawned) return;
+        if (!roomTransform.TryGetComponent(out BoxCollider roomCollider)) return;
 
-        Vector3 roomCenter = roomTransform.position;
-        Vector3 roomSize = roomTransform.localScale;
-
-        float yPos = PlayerSpawner.fixedPlayerY;
         int count = Random.Range(minSpawn, maxSpawn + 1);
 
         for (int i = 0; i < count; i++)
         {
-            Vector3 spawnPos = new Vector3(
-                Random.Range(roomCenter.x - roomSize.x / 2f + spawnMargin, roomCenter.x + roomSize.x / 2f - spawnMargin),
-                yPos,
-                Random.Range(roomCenter.z - roomSize.z / 2f + spawnMargin, roomCenter.z + roomSize.z / 2f - spawnMargin)
-            );
+            Vector3 spawnPos = GetRandomPointInsideRoom(roomCollider);
+            spawnPos.y = PlayerSpawner.fixedPlayerY; // ✅ Y값 고정
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject enemy = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);
 
-            if (enemy.TryGetComponent(out EnemyController ec) && player != null)
+            if (enemy.TryGetComponent(out EnemyController ec))
             {
                 ec.SetInitialDirection(player.position);
             }
         }
     }
 
+    private Vector3 GetRandomPointInsideRoom(BoxCollider box)
+    {
+        Vector3 size = box.size;
+        Vector3 center = box.center;
+
+        float marginX = Mathf.Clamp(spawnMargin, 0f, size.x / 2f);
+        float marginZ = Mathf.Clamp(spawnMargin, 0f, size.z / 2f);
+
+        // ✅ 로컬 좌표 기준 랜덤 위치
+        float randX = Random.Range(-size.x / 2f + marginX, size.x / 2f - marginX);
+        float randZ = Random.Range(-size.z / 2f + marginZ, size.z / 2f - marginZ);
+
+        Vector3 localPoint = new Vector3(randX, 0f, randZ);
+
+        // ✅ BoxCollider의 회전/스케일 모두 반영된 월드 좌표
+        Vector3 worldPoint = box.transform.TransformPoint(center + localPoint);
+        worldPoint.y = PlayerSpawner.fixedPlayerY;
+
+        return worldPoint;
+    }
+
+
+
+
+
+
     public void SpawnBosses()
     {
         if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
-        Vector3 roomCenter = roomTransform.position;
-        Vector3 roomSize = roomTransform.localScale;
-
+        Bounds bounds = roomCollider.bounds;
+        Vector3 roomMin = bounds.min;
+        Vector3 roomMax = bounds.max;
         float yPos = PlayerSpawner.fixedPlayerY;
 
         for (int i = 0; i < 2; i++)
         {
             Vector3 spawnPos = new Vector3(
-                Random.Range(roomCenter.x - roomSize.x / 2f + spawnMargin, roomCenter.x + roomSize.x / 2f - spawnMargin),
+                Random.Range(roomMin.x + spawnMargin, roomMax.x - spawnMargin),
                 yPos,
-                Random.Range(roomCenter.z - roomSize.z / 2f + spawnMargin, roomCenter.z + roomSize.z / 2f - spawnMargin)
+                Random.Range(roomMin.z + spawnMargin, roomMax.z - spawnMargin)
             );
 
             GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
 
-            if (boss.TryGetComponent(out BossController bc) && player != null)
+            if (boss.TryGetComponent(out BossController bc))
             {
                 bc.player = player;
             }

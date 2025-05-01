@@ -90,19 +90,20 @@ public class UIManager : MonoBehaviour
 
 
 
-    private IEnumerator RetryGame()
+    private void RetryGame()
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Scene scene = SceneManager.GetSceneAt(i);
             if (scene.name.StartsWith("Stage"))
             {
-                yield return SceneManager.UnloadSceneAsync(scene);
+                SceneManager.UnloadSceneAsync(scene);
             }
         }
         SetUI("inGame");
 
-        yield return SceneManager.LoadSceneAsync("Stage1", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync("Stage1", LoadSceneMode.Additive);
     }
 
     public void SetUI(string name)

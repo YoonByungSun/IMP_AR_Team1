@@ -11,7 +11,7 @@ public class Inventory : MonoBehaviour
     {
         public string name;
         public int count;
-        public Sprite icon;  // [Ãß°¡] ¾ÆÀÌÄÜ ÀúÀå
+        public Sprite icon;  // [ï¿½ß°ï¿½] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         public Item(string name, int count = 1, Sprite icon = null)
         {
@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour
         else Destroy(gameObject);
     }
 
-    // ¾ÆÀÌÅÛ Ãß°¡
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     public void AddItem(string itemName, Sprite itemIcon = null)
     {
         int idx = items.FindIndex(x => x.name == itemName);
@@ -55,13 +55,14 @@ public class Inventory : MonoBehaviour
         if (itemScript && itemScript.itemName == itemName)
         {
             itemScript.Use(player);
+            
         }
         else
         {
             switch (itemName)
             {
                 case "Spray":
-                    // ÀÎº¥Åä¸® ³» ¾ÆÀÌÅÛ ¾ÆÀÌÄÜ¿¡µµ ItemSpray.cs ÀÖ¾î¾ßÇÔ
+                    // ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ ItemSpray.cs ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
                     var spray = player.gameObject.AddComponent<ItemSpray>();
                     spray.Use(player);
                     Destroy(spray);
@@ -70,9 +71,12 @@ public class Inventory : MonoBehaviour
                     Debug.LogError($"{itemName} no Script");
                     break;
             }
+
+            var anim = player.GetComponent<PlayerAnimatorController>();
+            anim?.PlayCheer();
         }
 
-        // ¼ö·® °¨¼Ò
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Item updatedItem = items[index];
         updatedItem.count--;
         if (updatedItem.count <= 0)

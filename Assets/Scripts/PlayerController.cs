@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     public GameObject fkillerEffect;
     public GameObject gameOverUI;  // GameOver UI 오브젝트 연결용
 
-    private bool isDead = false;
     private int bossKillCount = 0;
 
     void Start()

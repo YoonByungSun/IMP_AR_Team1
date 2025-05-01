@@ -1,40 +1,35 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+ï»¿using UnityEngine;
 
 public class PlayerLife : MonoBehaviour
 {
-    public int life = 3;
-    public Image[] hearts; // ÇÏÆ® ÀÌ¹ÌÁö ¹è¿­
-    public GameObject gameOverUI; // Game Over ÅØ½ºÆ® + ¹öÆ°µéÀ» ´ãÀº ºÎ¸ð
+    public static PlayerLife Instance;
 
-    private void OnTriggerEnter(Collider other)
+    public int life = 3;
+
+    void Awake()
     {
-        if (other.CompareTag("Enemy"))
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
+
+    void Update()
+    {
+        if (life < 0)
         {
-            TakeDamage();
+            GameManager.Instance.GameOver(); // âœ… GameOver UIëŠ” GameManagerì—ì„œ ì²˜ë¦¬
         }
     }
 
-    void TakeDamage()
+    public void TakeDamage()
     {
         life--;
 
-        if (life >= 0 && life < hearts.Length)
+        if (life >= 0)
         {
-            hearts[life].enabled = false; // ÇÏÆ® ÇÏ³ª ²ô±â
+            GameObject heart = GameObject.Find("Heart" + (life + 1));
+            if (heart != null)
+                heart.SetActive(false);
         }
-
-        if (life <= 0)
-        {
-            GameOver();
-        }
-    }
-
-    void GameOver()
-    {
-        gameOverUI.SetActive(true);
-        Time.timeScale = 0f; // °ÔÀÓ ÀÏ½ÃÁ¤Áö
     }
 }
-

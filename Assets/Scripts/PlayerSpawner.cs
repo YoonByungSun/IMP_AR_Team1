@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -33,14 +32,14 @@ public class PlayerSpawner : MonoBehaviour
     {
         foreach (var addedImage in eventArgs.added)
         {
-            if (spawnedPlayer == null)
+            GameObject room = GameObject.Find("Room(Clone)");
+            if (spawnedPlayer == null && room != null)
             {
                 trackedImage = addedImage;
 
                 Vector3 markerPos = trackedImage.transform.position;
 
                 // ✅ Room이 있으면 Room 위에 생성
-                GameObject room = GameObject.Find("Room(Clone)");
                 float yOffset = 0.05f;
                 float baseY = markerPos.y;
 
@@ -69,6 +68,7 @@ public class PlayerSpawner : MonoBehaviour
 
                 spawnedPlayer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
                 spawnedPlayer.tag = "Player";
+                spawnedPlayer.transform.parent = new GameObject("Player").transform;
 
                 Debug.Log("✅ 플레이어 생성 완료: " + spawnPos);
             }

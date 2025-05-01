@@ -1,112 +1,161 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("UI Panels")]
+    public static UIManager Instance;
+
+    [Header("UI Lists")]
     public GameObject inGameUI;
-    public GameObject gameOverUI;
-    public GameObject gameClearUI;
-    public GameObject menuPanel;  // 타이틀 역할
+    public GameObject overUI;
+    public GameObject clearUI;
+    public GameObject homeUI;
 
     [Header("Buttons")]
     public GameObject retryButton;
     public GameObject exitButton_GameOver;
-    public GameObject returnToTitleButton;
+    public GameObject homeButton;
     public GameObject exitButton_Clear;
+
+    [Header("Stage Texts")]
+    public Text stage1Text;
+    public Text stage2Text;
+    public Text stage3Text;
+    public Color a = new Color32(0xFF, 0x83, 0x9E, 0xFF);
+    public Color b = new Color32(0xFF, 0xFF, 0xFF, 0xFF);
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
-        // 초기 UI 상태 설정
-        if (inGameUI != null) inGameUI.SetActive(false);
-        if (gameOverUI != null) gameOverUI.SetActive(false);
-        if (gameClearUI != null) gameClearUI.SetActive(false);
-        if (menuPanel != null) menuPanel.SetActive(true);  // 시작 시 타이틀 화면만 보이도록
-
-        // 버튼 이벤트 연결 (선택사항, OnClick에서 연결해도 무방)
+        SetUI("home");
         if (retryButton != null)
             retryButton.GetComponent<Button>().onClick.AddListener(OnRetryClicked);
-
         if (exitButton_GameOver != null)
             exitButton_GameOver.GetComponent<Button>().onClick.AddListener(OnExitClicked);
-
-        if (returnToTitleButton != null)
-            returnToTitleButton.GetComponent<Button>().onClick.AddListener(OnReturnToTitleClicked);
-
+        if (homeButton != null)
+            homeButton.GetComponent<Button>().onClick.AddListener(OnHomeClicked);
         if (exitButton_Clear != null)
             exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
-
-        // PlayerController에 GameOverUI 연결
-        var player = FindObjectOfType<PlayerController>();
-        if (player != null)
-        {
-            player.gameOverUI = gameOverUI;
-        }
     }
 
     public void StartGame()
     {
         Time.timeScale = 1f;
-
-        // MenuPanel 숨기고 게임 씬 로드
-        if (menuPanel != null)
-            menuPanel.SetActive(false);
-        inGameUI.SetActive(true);
-
+        SetUI("inGame");
         SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        SetUI("Stage1");
     }
-
-
-    public void ShowGameOverUI()
-    {
-        if (gameOverUI != null)
-        {
-            gameOverUI.SetActive(true);
-            Time.timeScale = 0f;
-        }
-    }
-
-    public void ShowGameClearUI()
-    {
-        if (gameClearUI != null)
-        {
-            gameClearUI.SetActive(true);
-            Time.timeScale = 0f;
-        }
-    }
-
-    // === 버튼용 public 함수들 (OnClick에서 직접 연결 가능) ===
 
     public void OnRetryClicked()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        StartCoroutine(RetryGame());
+        StartGame();
     }
 
-    public void OnReturnToTitleClicked()
+
+    public void OnHomeClicked()
     {
         Time.timeScale = 1f;
 
-        // UI 전환
-        if (gameClearUI != null) gameClearUI.SetActive(false);
-        if (gameOverUI != null) gameOverUI.SetActive(false);
-        if (menuPanel != null) menuPanel.SetActive(true);
-
-        // 현재 게임 씬 언로드 (UI 씬은 유지)
-        var currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name != "UI")
+        if (SceneManager.sceneCount != 1)
         {
-            SceneManager.UnloadSceneAsync(currentScene);
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name.StartsWith("Stage"))
+                    SceneManager.UnloadSceneAsync(scene);
+            }
         }
+        
+        SetUI("home");
+        SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
     public void OnExitClicked()
     {
-        Application.Quit();
-        Debug.Log("게임 종료 (빌드에서만 작동)");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+    }
+
+    private IEnumerator RetryGame()
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene.name.StartsWith("Stage"))
+            {
+                yield return SceneManager.UnloadSceneAsync(scene);
+            }
+        }
+        yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
+    }
+
+    public void SetUI(string name)
+    {
+        switch (name)
+        {
+            case "inGame":
+                inGameUI.SetActive(true);
+                overUI.SetActive(false);
+                clearUI.SetActive(false);
+                homeUI.SetActive(false);
+                break;
+            case "over":
+                inGameUI.SetActive(false);
+                overUI.SetActive(true);
+                clearUI.SetActive(false);
+                homeUI.SetActive(false);
+                break;
+            case "clear":
+                inGameUI.SetActive(false);
+                overUI.SetActive(false);
+                clearUI.SetActive(true);
+                homeUI.SetActive(false);
+                break;
+            case "home":
+                inGameUI.SetActive(false);
+                overUI.SetActive(false);
+                clearUI.SetActive(false);
+                homeUI.SetActive(true);
+                break;
+            case "Stage1":
+                stage1Text.color = a;
+                stage1Text.fontSize = 55;
+                stage2Text.color = b;
+                stage2Text.fontSize = 40;
+                stage3Text.color = b;
+                stage3Text.fontSize = 40;
+                break;
+            case "Stage2":
+                stage1Text.color = b;
+                stage1Text.fontSize = 40;
+                stage2Text.color = a;
+                stage2Text.fontSize = 55;
+                stage3Text.color = b;
+                stage3Text.fontSize = 40;
+                break;
+            case "Stage3":
+                stage1Text.color = b;
+                stage1Text.fontSize = 40;
+                stage2Text.color = b;
+                stage2Text.fontSize = 40;
+                stage3Text.color = a;
+                stage3Text.fontSize = 55;
+                break;
+            default:
+                Debug.LogError("No UI");
+                return;
+        }
     }
 }
-
-
-

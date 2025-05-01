@@ -77,7 +77,7 @@ public class UIManager : MonoBehaviour
                     SceneManager.UnloadSceneAsync(scene);
             }
         }
-
+        
         SetUI("home");
         SceneManager.LoadSceneAsync("Stage1", LoadSceneMode.Additive);
     }
@@ -102,7 +102,7 @@ public class UIManager : MonoBehaviour
         }
         SetUI("inGame");
 
-        yield return SceneManager.LoadSceneAsync("Stage1", LoadSceneMode.Additive);
+        yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
     public void SetUI(string name)

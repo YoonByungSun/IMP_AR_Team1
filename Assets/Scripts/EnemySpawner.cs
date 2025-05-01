@@ -99,7 +99,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             Vector3 spawnPos = GetRandomPointInsideRoom(roomCollider);
-            spawnPos.y = PlayerSpawner.fixedPlayerY; // ✅ Y값 고정
+            spawnPos.y = PlayerSpawner.fixedPlayerY; //  Y값 고정
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject enemy = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -110,10 +111,12 @@ public class PlayerController : MonoBehaviour
         if (scale >= 0.03f && IsSceneLoaded("Stage1"))
         {
             StartCoroutine(SwitchStage("Stage1", "Stage2"));
+            UIManager.Instance.SetUI("Stage2");
         }
         else if (scale >= 0.06f && IsSceneLoaded("Stage2"))
         {
             StartCoroutine(SwitchStage("Stage2", "Stage3"));
+            UIManager.Instance.SetUI("Stage3");
         }
     }
 

@@ -7,17 +7,24 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [Header("UI Panels")]
+    [Header("UI Lists")]
     public GameObject inGameUI;
     public GameObject overUI;
     public GameObject clearUI;
-    public GameObject homeUI;  // 타이틀 역할
+    public GameObject homeUI;
 
     [Header("Buttons")]
     public GameObject retryButton;
     public GameObject exitButton_GameOver;
-    public GameObject returnToTitleButton;
+    public GameObject homeButton;
     public GameObject exitButton_Clear;
+
+    [Header("Stage Texts")]
+    public Text stage1Text;
+    public Text stage2Text;
+    public Text stage3Text;
+    public Color a = new Color32(0xFF, 0x83, 0x9E, 0xFF);
+    public Color b = new Color32(0xFF, 0xFF, 0xFF, 0xFF);
 
     private void Awake()
     {
@@ -32,8 +39,8 @@ public class UIManager : MonoBehaviour
             retryButton.GetComponent<Button>().onClick.AddListener(OnRetryClicked);
         if (exitButton_GameOver != null)
             exitButton_GameOver.GetComponent<Button>().onClick.AddListener(OnExitClicked);
-        if (returnToTitleButton != null)
-            returnToTitleButton.GetComponent<Button>().onClick.AddListener(OnReturnToTitleClicked);
+        if (homeButton != null)
+            homeButton.GetComponent<Button>().onClick.AddListener(OnHomeClicked);
         if (exitButton_Clear != null)
             exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
     }
@@ -42,29 +49,19 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SetUI("inGame");
-
         SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        SetUI("Stage1");
     }
-
-
-    //public void ShowGameOverUI()
-    //{
-    //    SetUI("over");
-    //}
-
-    //public void ShowGameClearUI()
-    //{
-    //    SetUI("clear");
-    //}
 
     public void OnRetryClicked()
     {
         Time.timeScale = 1f;
         StartCoroutine(RetryGame());
+        StartGame();
     }
 
 
-    public void OnReturnToTitleClicked()
+    public void OnHomeClicked()
     {
         Time.timeScale = 1f;
 
@@ -79,16 +76,17 @@ public class UIManager : MonoBehaviour
         }
         
         SetUI("home");
-        SceneManager.LoadSceneAsync("Stage1", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
     public void OnExitClicked()
     {
-        Application.Quit();
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
     }
-
-
-
 
     private IEnumerator RetryGame()
     {
@@ -100,8 +98,6 @@ public class UIManager : MonoBehaviour
                 yield return SceneManager.UnloadSceneAsync(scene);
             }
         }
-        SetUI("inGame");
-
         yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
@@ -132,6 +128,30 @@ public class UIManager : MonoBehaviour
                 overUI.SetActive(false);
                 clearUI.SetActive(false);
                 homeUI.SetActive(true);
+                break;
+            case "Stage1":
+                stage1Text.color = a;
+                stage1Text.fontSize = 55;
+                stage2Text.color = b;
+                stage2Text.fontSize = 40;
+                stage3Text.color = b;
+                stage3Text.fontSize = 40;
+                break;
+            case "Stage2":
+                stage1Text.color = b;
+                stage1Text.fontSize = 40;
+                stage2Text.color = a;
+                stage2Text.fontSize = 55;
+                stage3Text.color = b;
+                stage3Text.fontSize = 40;
+                break;
+            case "Stage3":
+                stage1Text.color = b;
+                stage1Text.fontSize = 40;
+                stage2Text.color = b;
+                stage2Text.fontSize = 40;
+                stage3Text.color = a;
+                stage3Text.fontSize = 55;
                 break;
             default:
                 Debug.LogError("No UI");

@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.05
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.05
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.05
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.x
@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 18.19
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       propertyPath: m_LocalPosition.z
@@ -112,6 +112,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
       insertIndex: -1
       addedObject: {fileID: -5564637102451604207}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4611713561973347861}
   m_SourcePrefab: {fileID: 100100000, guid: 75d550b311dbf0f4b971f5ad1a628071, type: 3}
 --- !u!1 &4145092231003505334 stripped
 GameObject:
@@ -131,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: GenericItem
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 051a9b46df008b849849c53a7d80ceb3, type: 3}
   rotateSpeed: {x: 45, y: 90, z: 30}
 --- !u!114 &-5564637102451604207
 MonoBehaviour:
@@ -146,6 +149,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: GenericItem
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 051a9b46df008b849849c53a7d80ceb3, type: 3}
   rotateSpeed: {x: 45, y: 90, z: 30}
   radius: 2
+--- !u!65 &4611713561973347861
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4145092231003505334}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 51.54, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

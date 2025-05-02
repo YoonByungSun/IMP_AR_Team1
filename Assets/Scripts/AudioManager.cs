@@ -17,6 +17,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip hitSFX;
     public AudioClip growSFX;
     public AudioClip buttonSFX;
+    public AudioClip spray;
 
     void Awake()
     {
@@ -45,9 +46,6 @@ public class AudioManager : MonoBehaviour
                 break;
             case "Stage3":
                 PlayBGM(stage3BGM);
-                break;
-            case "GameClear":
-                PlayBGM(stageClearBGM);
                 break;
             default:
                 bgmSource.Stop();

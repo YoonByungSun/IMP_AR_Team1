@@ -359,6 +359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomPrefab: {fileID: 4866870555864836632, guid: f69612e93bf1b0645be195a18ff9ddd4, type: 3}
+  isSpawned: 0
 --- !u!114 &32289488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1170,6 +1171,9 @@ MonoBehaviour:
   overUI: {fileID: 0}
   clearUI: {fileID: 0}
   homeUI: {fileID: 0}
+  waitForPlane: {fileID: 0}
+  touchToStart: {fileID: 0}
+  waitForPlayer: {fileID: 0}
   retryButton: {fileID: 0}
   exitButton_GameOver: {fileID: 0}
   homeButton: {fileID: 0}
@@ -1210,7 +1214,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1883814370
 Transform:
   m_ObjectHideFlags: 0

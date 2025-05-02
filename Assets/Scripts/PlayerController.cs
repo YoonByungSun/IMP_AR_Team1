@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +10,6 @@ public class PlayerController : MonoBehaviour
     public GameObject fkillerEffect;
     public GameObject gameOverUI;  // GameOver UI 오브젝트 연결용
 
-    private bool isDead = false;
     private int bossKillCount = 0;
 
     void Start()
@@ -110,10 +110,12 @@ public class PlayerController : MonoBehaviour
         if (scale >= 0.03f && IsSceneLoaded("Stage1"))
         {
             StartCoroutine(SwitchStage("Stage1", "Stage2"));
+            UIManager.Instance.SetUI("Stage2");
         }
         else if (scale >= 0.06f && IsSceneLoaded("Stage2"))
         {
             StartCoroutine(SwitchStage("Stage2", "Stage3"));
+            UIManager.Instance.SetUI("Stage3");
         }
     }
 

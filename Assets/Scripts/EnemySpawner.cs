@@ -14,12 +14,12 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(WaitForPlayerAndSpawn());
+        StartCoroutine(SpawnRoutine());
         if (!GameObject.Find("Enemy"))
             spawned = new GameObject("Enemy");
     }
 
-    IEnumerator WaitForPlayerAndSpawn()
+    IEnumerator SpawnRoutine()
     {
         while (player == null)
         {
@@ -36,34 +36,19 @@ public class EnemySpawner : MonoBehaviour
             yield return null;
         }
 
-        // 🎯 현재 로드된 스테이지 씬 중 하나를 활성 씬으로 설정
-        // UI 씬은 Single, Stage 씬은 Additive로 불러오고 있음
-        // 이 부분 수정해야할듯
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-            if (scene.name == "Stage1" || scene.name == "Stage2" || scene.name == "Stage3")
-            {
-                SceneManager.SetActiveScene(scene); // ✅ 이후 Instantiate용
-                SceneManager.MoveGameObjectToScene(spawned, scene); // ✅ 부모 오브젝트도 Stage 씬으로 이동
-                break;
-            }
-        }
-
-        // Check Current Stage
         if (IsSceneLoaded("Stage1") || IsSceneLoaded("Stage2"))
         {
-            StartCoroutine(SpawnEnemiesUntilScaleLimit());
+            StartCoroutine(CheckScale());
         }
         else if (IsSceneLoaded("Stage3"))
         {
-            StartCoroutine(SpawnEnemiesUntilScaleLimit());
-            SpawnBosses();
+            StartCoroutine(CheckScale());
+            SpawnBoss();
         }
     }
 
 
-    IEnumerator SpawnEnemiesUntilScaleLimit()
+    IEnumerator CheckScale()
     {
         string currentScene = SceneManager.GetActiveScene().name;
 
@@ -75,19 +60,17 @@ public class EnemySpawner : MonoBehaviour
                 (IsSceneLoaded("Stage2") && scale >= 0.2f) ||
                 (IsSceneLoaded("Stage3") && scale >= 0.5f))
             {
-                Debug.Log("[EnemySpawner] Scale condition met. Stopping enemy spawn.");
                 yield break;
             }
 
-
-            SpawnEnemies(6, 7);
+            SpawnEnemy(6, 7);
             yield return new WaitForSeconds(3f);
         }
     }
 
-    public void SpawnEnemies(int minSpawn = 1, int maxSpawn = 3)
+    public void SpawnEnemy(int minSpawn = 1, int maxSpawn = 3)
     {
-        if (GameManager.isGameOver) return;
+        if (GameManager.isGameOver || GameManager.isGameClear) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
         if (!spawned) return;
 
@@ -110,14 +93,14 @@ public class EnemySpawner : MonoBehaviour
 
             if (enemy.TryGetComponent(out EnemyController ec) && player != null)
             {
-                ec.SetInitialDirection(player.position);
+                ec.InitDir(player.position);
             }
         }
     }
 
-    public void SpawnBosses()
+    public void SpawnBoss()
     {
-        if (GameManager.isGameOver) return;
+        if (GameManager.isGameOver || GameManager.isGameClear) return;
         if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 

@@ -6,7 +6,7 @@ using System.Collections;
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public static float fixedPlayerY = 0.3f;
+    public static float fixedPlayerY = 0.01f;
     public bool isSpawned = false;
 
     private GameObject spawnedPlayer;
@@ -54,7 +54,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
     {
-        if (GameManager.isGameOver) return;
+        if (GameManager.isGameOver || GameManager.isGameClear) return;
 
         GameObject room = RoomSpawner.Instance.GetRoom();
         if (room == null) return;

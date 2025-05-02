@@ -12,10 +12,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<PlayerAnimator>();
-        StartCoroutine(MovingAnimationRoutine());
+        StartCoroutine(FlyRoutine());
     }
 
-     IEnumerator MovingAnimationRoutine()
+     IEnumerator FlyRoutine()
     {
         while (true)
         {
@@ -34,8 +34,8 @@ public class PlayerController : MonoBehaviour
             {
                 case EnemyController.EnemyType.Mushnub:
                     ScaleUp(0.002f);
-                    animator?.PlayShout();
                     Destroy(other.gameObject);
+                    animator?.PlayShout();
                     break;
                 case EnemyController.EnemyType.GreenBlob:
                     if (scale >= 0.03f)
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(scale, scale, scale);
         AudioManager.Instance.PlaySFX(AudioManager.Instance.growSFX);
 
-        // Stage Manage
+        // Change Stage if Scale Value is enough
         if (scale >= 0.03f && IsSceneLoaded("Stage1"))
         {
             StartCoroutine(SwitchStage("Stage1", "Stage2"));

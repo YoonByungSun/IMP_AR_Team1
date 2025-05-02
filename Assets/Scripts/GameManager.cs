@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     {
         if (isGameClear) return;
         isGameClear = true;
-        Debug.Log("Game Clear!");
         UIManager.Instance.SetUI("clear");
     }
 
@@ -28,7 +27,7 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
-        Debug.Log("Game Over");
         UIManager.Instance.SetUI("over");
     }
+
 }

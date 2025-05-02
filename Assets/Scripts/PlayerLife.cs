@@ -5,21 +5,21 @@ public class PlayerLife : MonoBehaviour
     public static PlayerLife Instance;
 
     public int life = 3;
-    private PlayerAnimatorController animatorController;
+    private PlayerAnimator animator;
 
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        animatorController = GetComponent<PlayerAnimatorController>();
+        animator = GetComponent<PlayerAnimator>();
     }
 
     void Update()
     {
         if (life < 0)
         {
-            animatorController?.PlayPanic();
+            animator?.PlayPanic();
             GameManager.Instance.GameOver();
         }
     }
@@ -27,7 +27,7 @@ public class PlayerLife : MonoBehaviour
     public void TakeDamage()
     {
         life--;
-        animatorController?.PlayGetHit();
+        animator?.PlayGetHit();
 
         if (life >= 0)
         {

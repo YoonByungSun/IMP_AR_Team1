@@ -46,7 +46,7 @@ public class RoomSpawner : MonoBehaviour
                 if (hitPlane != null)
                 {
                     ARAnchor anchor = anchorManager.AttachAnchor(hitPlane, hitPose);
-                    if (anchor != null)
+                    if (anchor != null && !UIManager.Instance.IsOverUI(touch.position))
                     {
                         room = Instantiate(roomPrefab, anchor.transform);
                         room.transform.localPosition = Vector3.zero;
@@ -59,15 +59,9 @@ public class RoomSpawner : MonoBehaviour
 
                         // Disable Plane Visualization
                         foreach (ARPlane plane in planeManager.trackables)
-                        {
-                            plane.GetComponent<MeshRenderer>().enabled = false;
-                            plane.GetComponent<ARPlaneMeshVisualizer>().enabled = false;
-                        }
+                            DisableVisualizer(plane);
                     }
-                    else
-                    {
-                        Debug.LogWarning("Anchor spawn failed.");
-                    }
+                    else Debug.LogWarning("Anchor spawn failed.");
                 }
             }
         }

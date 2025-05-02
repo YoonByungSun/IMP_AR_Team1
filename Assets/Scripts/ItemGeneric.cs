@@ -12,14 +12,12 @@ public class ItemGeneric : MonoBehaviour
     {
         // Set from each Item Script (Override)
     }
-
-    // Item Rotating Animation
+    
     protected virtual void Update()
     {
         transform.Rotate(rotateSpeed * Time.deltaTime, Space.World);
     }
 
-    // Add Items in Inventory when Collide with Player Object
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

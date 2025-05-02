@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Function: Spray Item
 public class ItemSpray : ItemGeneric
 {
     public float radius = 2.0f;

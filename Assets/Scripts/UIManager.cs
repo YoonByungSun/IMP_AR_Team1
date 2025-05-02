@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// Function: Manage all UIs except InventoryUI
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
@@ -22,7 +21,6 @@ public class UIManager : MonoBehaviour
     public GameObject waitForPlayer;
 
     [Header("Buttons")]
-    public GameObject retryButton;
     public GameObject exitButton_GameOver;
     public GameObject homeButton;
     public GameObject exitButton_Clear;
@@ -45,8 +43,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         SetUI("home");
-        if (retryButton != null)
-            retryButton.GetComponent<Button>().onClick.AddListener(OnRetryClicked);
         if (exitButton_GameOver != null)
             exitButton_GameOver.GetComponent<Button>().onClick.AddListener(OnExitClicked);
         if (homeButton != null)
@@ -59,6 +55,7 @@ public class UIManager : MonoBehaviour
     // if both is true, call StartGame()
     public void ReadyGame()
     {
+        GameManager.isGameOver = false;
         Time.timeScale = 1f;
         SetUI("inGame");
         SetUI("ready");
@@ -87,7 +84,6 @@ public class UIManager : MonoBehaviour
             {
                 waitForPlane.SetActive(false);
                 touchToStart.SetActive(false);
-                //StartGame();
                 StartCoroutine(CheckPlayer());
                 yield break;
             }
@@ -116,21 +112,14 @@ public class UIManager : MonoBehaviour
     // Call if Plane detected, and Room created
     public void StartGame()
     {
-        if (SceneManager.sceneCount == 1){
+        if (SceneManager.sceneCount == 1)
+        {
             AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonSFX);
             SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
         }
         else return;
 
         SetUI("Stage1");
-    }
-
-
-    public void OnRetryClicked()
-    {
-        Time.timeScale = 1f;
-        StartCoroutine(RetryGame());
-        ReadyGame();
     }
 
     // UI Button events
@@ -149,7 +138,7 @@ public class UIManager : MonoBehaviour
         }
         
         SetUI("home");
-        SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
     }
 
     public void OnExitClicked()
@@ -159,19 +148,6 @@ public class UIManager : MonoBehaviour
 #else
     Application.Quit();
 #endif
-    }
-
-    private IEnumerator RetryGame()
-    {
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-            if (scene.name.StartsWith("Stage"))
-            {
-                yield return SceneManager.UnloadSceneAsync(scene);
-            }
-        }
-        yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
     // Call when UI update needed

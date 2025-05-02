@@ -55,7 +55,6 @@ public class RoomSpawner : MonoBehaviour
 
                         Debug.Log("Room Spawned with Anchor at " + hitPose.position);
 
-                        // Disable Plane Visualization
                         foreach (ARPlane plane in planeManager.trackables)
                             DisableVisualizer(plane);
                     }

@@ -32,7 +32,6 @@ public class UIManager : MonoBehaviour
     public Color a = new Color32(0xFF, 0x83, 0x9E, 0xFF);
     public Color b = new Color32(0xFF, 0xFF, 0xFF, 0xFF);
 
-    // Singletone
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -51,8 +50,8 @@ public class UIManager : MonoBehaviour
             exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
     }
 
-    // Check if AR Plane detected, if Room Object created
-    // if both is true, call StartGame()
+    // Check if AR Plane detected, Room Object created and Player Object Spawned
+    // if all of them are true, call StartGame()
     public void ReadyGame()
     {
         GameManager.isGameOver = false;
@@ -109,7 +108,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Call if Plane detected, and Room created
+    // Call if Plane detected, Room Created and Player Spawned
     public void StartGame()
     {
         if (SceneManager.sceneCount == 1)
@@ -122,7 +121,6 @@ public class UIManager : MonoBehaviour
         SetUI("Stage1");
     }
 
-    // UI Button events
     public void OnHomeClicked()
     {
         Time.timeScale = 1f;
@@ -150,7 +148,6 @@ public class UIManager : MonoBehaviour
 #endif
     }
 
-    // Call when UI update needed
     public void SetUI(string name)
     {
         switch (name)
@@ -217,7 +214,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Check only in Home menu
     public bool IsOverUI(Vector2 pos)
     {
         if (homeUI.active)

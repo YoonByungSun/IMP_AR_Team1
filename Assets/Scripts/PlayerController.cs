@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
     {
         scale += amount;
         transform.localScale = new Vector3(scale, scale, scale);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.growSFX);
 
         // Stage Manage
         if (scale >= 0.03f && IsSceneLoaded("Stage1"))

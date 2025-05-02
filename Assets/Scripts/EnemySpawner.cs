@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -47,7 +46,6 @@ public class EnemySpawner : MonoBehaviour
             {
                 SceneManager.SetActiveScene(scene); // ✅ 이후 Instantiate용
                 SceneManager.MoveGameObjectToScene(spawned, scene); // ✅ 부모 오브젝트도 Stage 씬으로 이동
-                //Debug.Log($"[EnemySpawner] ActiveScene set to {scene.name} / 'Enemy' container moved.");
                 break;
             }
         }
@@ -71,7 +69,7 @@ public class EnemySpawner : MonoBehaviour
 
         while (true)
         {
-            float scale = PlayerData.Instance != null ? PlayerData.Instance.savedScale : 0f;
+            float scale = PlayerController.scale;
 
             if ((IsSceneLoaded("Stage1") && scale >= 0.06f) ||
                 (IsSceneLoaded("Stage2") && scale >= 0.2f) ||

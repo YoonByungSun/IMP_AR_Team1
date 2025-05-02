@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -235,5 +237,22 @@ public class UIManager : MonoBehaviour
                 Debug.LogError("No UI");
                 return;
         }
+    }
+
+    // Check only in Home menu
+    public bool IsOverUI(Vector2 pos)
+    {
+        if (homeUI.active)
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = new Vector2(pos.x, pos.y);
+
+            // make a raycast from the pos to check if the raycast hits any UI elements
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+
+            return results.Count > 0;
+        }
+        return false;
     }
 }

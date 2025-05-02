@@ -14,7 +14,6 @@ public class PlayerSpawner : MonoBehaviour
 
     void Awake()
     {
-        //trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
         trackedImageManager = FindAnyObjectByType<ARTrackedImageManager>();
     }
 
@@ -41,7 +40,6 @@ public class PlayerSpawner : MonoBehaviour
 
                 Vector3 markerPos = trackedImage.transform.position;
 
-                // ✅ Room이 있으면 Room 위에 생성
                 float yOffset = 0.05f;
                 float baseY = markerPos.y;
 
@@ -55,24 +53,13 @@ public class PlayerSpawner : MonoBehaviour
 
                 spawnedPlayer = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
 
-                string currentScene = SceneManager.GetActiveScene().name;
-                float scaleFactor;
-
-                if (PlayerData.Instance != null)
-                {
-                    PlayerData.Instance.SetScaleForStage(currentScene);
-                    scaleFactor = PlayerData.Instance.savedScale;
-                }
-                else
-                {
-                    scaleFactor = 0.03f;
-                }
-
-                spawnedPlayer.transform.localScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+                float scale = 0.015f;
+                spawnedPlayer.transform.localScale = new Vector3(scale, scale, scale);
                 spawnedPlayer.tag = "Player";
                 spawnedPlayer.transform.parent = new GameObject("Player").transform;
+                PlayerController.scale = scale;
 
-                Debug.Log("✅ 플레이어 생성 완료: " + spawnPos);
+                Debug.Log("Player Spawned at " + spawnPos);
                 isSpawned = true;
             }
         }

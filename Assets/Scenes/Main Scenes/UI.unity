@@ -586,10 +586,10 @@ MonoBehaviour:
   stage3BGM: {fileID: 8300000, guid: 3020696ef31fa94458dded1688c42175, type: 3}
   stageClearBGM: {fileID: 8300000, guid: aa1a91efbc003424492897468236b416, type: 3}
   sfxSource: {fileID: 246699002}
-  hitSFX: {fileID: 8300000, guid: 8367513f938e59c4c8b6d27ce665dab8, type: 3}
+  hitSFX: {fileID: 8300000, guid: 2f650a71417667d458b016c4fd49f42c, type: 3}
   growSFX: {fileID: 8300000, guid: bb3609dea8f9cb845b4b2e93b902f750, type: 3}
   buttonSFX: {fileID: 8300000, guid: 15539f18d653dfa4dbbde155b85ad8a1, type: 3}
-  spray: {fileID: 8300000, guid: bef8b098b3990434fa3a13eacd6665df, type: 3}
+  spray: {fileID: 8300000, guid: 7e013ec1ee7dbb447addfe5592d4aac9, type: 3}
 --- !u!4 &246699004
 Transform:
   m_ObjectHideFlags: 0

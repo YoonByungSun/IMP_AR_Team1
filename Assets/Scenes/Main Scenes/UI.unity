@@ -581,15 +581,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 246699002}
-  stage1BGM: {fileID: 8300000, guid: 3c51da83ae134934e8b129449ecb5a4c, type: 3}
-  stage2BGM: {fileID: 8300000, guid: b64dab654b0d1bc4ba0f2a7d7e9468c5, type: 3}
-  stage3BGM: {fileID: 8300000, guid: 3020696ef31fa94458dded1688c42175, type: 3}
-  stageClearBGM: {fileID: 8300000, guid: aa1a91efbc003424492897468236b416, type: 3}
+  stage1BGM: {fileID: 8300000, guid: 84c67e9c237ae8d43a52813b4b1c01c4, type: 3}
+  stage2BGM: {fileID: 8300000, guid: 1287b492d9d81794799c065b2f30b90a, type: 3}
+  stage3BGM: {fileID: 8300000, guid: cad148a0087279645a0846ea18693011, type: 3}
+  stageClearBGM: {fileID: 8300000, guid: 684e479edf684314ea78a3b641e213e9, type: 3}
   sfxSource: {fileID: 246699002}
-  hitSFX: {fileID: 8300000, guid: 2f650a71417667d458b016c4fd49f42c, type: 3}
-  growSFX: {fileID: 8300000, guid: bb3609dea8f9cb845b4b2e93b902f750, type: 3}
-  buttonSFX: {fileID: 8300000, guid: 15539f18d653dfa4dbbde155b85ad8a1, type: 3}
-  spray: {fileID: 8300000, guid: 7e013ec1ee7dbb447addfe5592d4aac9, type: 3}
+  hitSFX: {fileID: 8300000, guid: ca41d4440e9aec047959d429e6993107, type: 3}
+  growSFX: {fileID: 8300000, guid: 87823001670b4db4a9d645d1bd016e04, type: 3}
+  buttonSFX: {fileID: 8300000, guid: d3080d3f8ed24904f9c33b34dad397ab, type: 3}
+  spray: {fileID: 8300000, guid: 1d134f3238976ee43805e545d7ae6e1a, type: 3}
 --- !u!4 &246699004
 Transform:
   m_ObjectHideFlags: 0

@@ -59,6 +59,7 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Mushnub과 충돌 → ScaleUp");
                     ScaleUp(0.002f);
                     animatorController?.PlayShout();
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.growSFX);
                     Destroy(other.gameObject);
                     break;
 
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
                     if (scale >= (enemy.enemyType == EnemyController.EnemyType.GreenBlob ? 0.03f : 0.06f))
                     {
                         ScaleUp(0.002f);
+                        AudioManager.Instance.PlaySFX(AudioManager.Instance.growSFX);
                         Destroy(other.gameObject);
                         animatorController?.PlayShout(); // 적 처치 시
                     }

@@ -19,7 +19,7 @@ public class PlayerLife : MonoBehaviour
     {
         if (life < 0)
         {
-            animatorController?.PlayPanic(); // 사망 애니메이션
+            animatorController?.PlayPanic();
             GameManager.Instance.GameOver();
         }
     }
@@ -27,8 +27,7 @@ public class PlayerLife : MonoBehaviour
     public void TakeDamage()
     {
         life--;
-
-        animatorController?.PlayGetHit(); // 피격 애니메이션
+        animatorController?.PlayGetHit();
 
         if (life >= 0)
         {

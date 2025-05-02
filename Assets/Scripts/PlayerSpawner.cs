@@ -6,6 +6,7 @@ public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
     public static float fixedPlayerY = 0.3f; // 💡 enemy들도 이 Y값 참조
+    public bool isSpawned = false;
 
     private GameObject spawnedPlayer;
     private ARTrackedImage trackedImage;
@@ -13,7 +14,8 @@ public class PlayerSpawner : MonoBehaviour
 
     void Awake()
     {
-        trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
+        //trackedImageManager = FindObjectOfType<ARTrackedImageManager>();
+        trackedImageManager = FindAnyObjectByType<ARTrackedImageManager>();
     }
 
     void OnEnable()
@@ -32,7 +34,7 @@ public class PlayerSpawner : MonoBehaviour
     {
         foreach (var addedImage in eventArgs.added)
         {
-            GameObject room = GameObject.Find("Room(Clone)");
+            GameObject room = RoomSpawner.Instance.GetRoom();
             if (spawnedPlayer == null && room != null)
             {
                 trackedImage = addedImage;
@@ -71,6 +73,7 @@ public class PlayerSpawner : MonoBehaviour
                 spawnedPlayer.transform.parent = new GameObject("Player").transform;
 
                 Debug.Log("✅ 플레이어 생성 완료: " + spawnPos);
+                isSpawned = true;
             }
         }
 

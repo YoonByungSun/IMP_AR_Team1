@@ -16,12 +16,12 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         StartCoroutine(WaitForPlayerAndSpawn());
-        spawned = new GameObject("Enemy");
+        if (!GameObject.Find("Enemy"))
+            spawned = new GameObject("Enemy");
     }
 
     IEnumerator WaitForPlayerAndSpawn()
     {
-        // 기존 로직 유지
         while (player == null)
         {
             GameObject playerObj = GameObject.FindWithTag("Player");
@@ -33,14 +33,13 @@ public class EnemySpawner : MonoBehaviour
 
         while (roomTransform == null)
         {
-            GameObject roomObj = GameObject.FindWithTag("Room");
-            if (roomObj != null)
-                roomTransform = roomObj.transform;
-
+            roomTransform = RoomSpawner.Instance.GetRoom().transform;
             yield return null;
         }
 
         // 🎯 현재 로드된 스테이지 씬 중 하나를 활성 씬으로 설정
+        // UI 씬은 Single, Stage 씬은 Additive로 불러오고 있음
+        // 이 부분 수정해야할듯
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Scene scene = SceneManager.GetSceneAt(i);
@@ -48,13 +47,12 @@ public class EnemySpawner : MonoBehaviour
             {
                 SceneManager.SetActiveScene(scene); // ✅ 이후 Instantiate용
                 SceneManager.MoveGameObjectToScene(spawned, scene); // ✅ 부모 오브젝트도 Stage 씬으로 이동
-                Debug.Log($"[EnemySpawner] ActiveScene set to {scene.name} / 'Enemy' container moved.");
+                //Debug.Log($"[EnemySpawner] ActiveScene set to {scene.name} / 'Enemy' container moved.");
                 break;
             }
         }
 
-
-        // 이후부터 생성되는 오브젝트는 위에서 활성화한 씬에 귀속됨
+        // Check Current Stage
         if (IsSceneLoaded("Stage1") || IsSceneLoaded("Stage2"))
         {
             StartCoroutine(SpawnEnemiesUntilScaleLimit());
@@ -91,7 +89,6 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemies(int minSpawn = 1, int maxSpawn = 3)
     {
-        if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
         if (!spawned) return;
 

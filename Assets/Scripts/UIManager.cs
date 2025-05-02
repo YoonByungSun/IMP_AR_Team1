@@ -1,8 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+// Function: Manage all UIs except InventoryUI
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
@@ -12,6 +13,11 @@ public class UIManager : MonoBehaviour
     public GameObject overUI;
     public GameObject clearUI;
     public GameObject homeUI;
+
+    [Header("Check Ready")]
+    public GameObject waitForPlane;
+    public GameObject touchToStart;
+    public GameObject waitForPlayer;
 
     [Header("Buttons")]
     public GameObject retryButton;
@@ -26,12 +32,14 @@ public class UIManager : MonoBehaviour
     public Color a = new Color32(0xFF, 0x83, 0x9E, 0xFF);
     public Color b = new Color32(0xFF, 0xFF, 0xFF, 0xFF);
 
+    // Singletone
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
+    // Init UI
     void Start()
     {
         SetUI("home");
@@ -45,22 +53,83 @@ public class UIManager : MonoBehaviour
             exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
     }
 
-    public void StartGame()
+    // Check if AR Plane detected, if Room Object created
+    // if both is true, call StartGame()
+    public void ReadyGame()
     {
         Time.timeScale = 1f;
         SetUI("inGame");
-        SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        SetUI("ready");
+
+        StartCoroutine(CheckPlane());
+    }
+
+    private IEnumerator CheckPlane()
+    {
+        while (true)
+        {
+            bool planeReady = RoomSpawner.Instance.GetPlaneCount() > 0;
+            bool roomReady = RoomSpawner.Instance.isSpawned;
+
+            if (!planeReady) // Waiting for Plane Detection...
+            {
+                waitForPlane.SetActive(true);
+                touchToStart.SetActive(false);
+            }
+            else if (!roomReady) // Touch Any Plane to Get Ready
+            {
+                waitForPlane.SetActive(false);
+                touchToStart.SetActive(true);
+            }
+            else // Start Game
+            {
+                waitForPlane.SetActive(false);
+                touchToStart.SetActive(false);
+                //StartGame();
+                StartCoroutine(CheckPlayer());
+                yield break;
+            }
+
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    private IEnumerator CheckPlayer()
+    {
+        while (true)
+        {
+            bool playerReady = GameObject.Find("Player") != null;
+            if (!playerReady)
+                waitForPlayer.SetActive(true);
+            else
+            {
+                waitForPlayer.SetActive(false);
+                StartGame();
+                yield break;
+            }
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    // Call if Plane detected, and Room created
+    public void StartGame()
+    {
+        if (SceneManager.sceneCount == 1)
+            SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        else return;
+
         SetUI("Stage1");
     }
+
 
     public void OnRetryClicked()
     {
         Time.timeScale = 1f;
         StartCoroutine(RetryGame());
-        StartGame();
+        ReadyGame();
     }
 
-
+    // UI Button events
     public void OnHomeClicked()
     {
         Time.timeScale = 1f;
@@ -101,6 +170,7 @@ public class UIManager : MonoBehaviour
         yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
+    // Call when UI update needed
     public void SetUI(string name)
     {
         switch (name)
@@ -152,6 +222,14 @@ public class UIManager : MonoBehaviour
                 stage2Text.fontSize = 40;
                 stage3Text.color = a;
                 stage3Text.fontSize = 55;
+                break;
+            case "ready":
+                stage1Text.color = b;
+                stage1Text.fontSize = 40;
+                stage2Text.color = b;
+                stage2Text.fontSize = 40;
+                stage3Text.color = b;
+                stage3Text.fontSize = 40;
                 break;
             default:
                 Debug.LogError("No UI");

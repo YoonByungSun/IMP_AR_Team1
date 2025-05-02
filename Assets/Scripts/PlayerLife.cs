@@ -28,6 +28,7 @@ public class PlayerLife : MonoBehaviour
     {
         life--;
         animator?.PlayGetHit();
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.hitSFX);
 
         if (life >= 0)
         {

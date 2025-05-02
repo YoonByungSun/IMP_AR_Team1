@@ -1,23 +1,22 @@
 using UnityEngine;
 
-// Function: Spray Item
-public class ItemSpray : ItemGeneric
+public class ItemSpray : MonoBehaviour
 {
     public float radius = 2.0f;
 
-    protected override void Reset()
+    void OnTriggerEnter(Collider other)
     {
-        itemName = "Spray";
-    }
-
-    public override void Use(Transform player)
-    {
-        foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        if (other.CompareTag("Player"))
         {
-            if (Vector3.Distance(player.position, enemy.transform.position) < radius)
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
             {
-                Destroy(enemy);
+                if (Vector3.Distance(other.transform.position, enemy.transform.position) < radius)
+                {
+                    Destroy(enemy);
+                }
             }
+            Destroy(gameObject); 
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.spray);
         }
     }
 }

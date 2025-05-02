@@ -39,7 +39,7 @@ public class ItemSpawner : MonoBehaviour
         Bounds bounds = roomCollider.bounds;
         Vector3 roomMin = bounds.min;
         Vector3 roomMax = bounds.max;
-        float yPos = 0.1f;
+        float yPos = 0.55f;
 
         int spawned = 0;
 

@@ -11,9 +11,13 @@ public class PlayerController : MonoBehaviour
     public GameObject gameOverUI;  // GameOver UI 오브젝트 연결용
 
     private int bossKillCount = 0;
+    private PlayerAnimatorController animatorController;
 
     void Start()
     {
+        animatorController = GetComponent<PlayerAnimatorController>();
+        StartCoroutine(FlyRoutine());
+
         string currentScene = SceneManager.GetActiveScene().name;
 
         // Stage1이 아닐 때만 저장된 스케일 적용
@@ -22,6 +26,15 @@ public class PlayerController : MonoBehaviour
             scale = PlayerData.Instance.savedScale;
             transform.localScale = new Vector3(scale, scale, scale);
             Debug.Log($"savedScale 적용됨 = {scale}");
+        }
+    }
+
+     IEnumerator FlyRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(4f);
+            animatorController?.PlayFly();
         }
     }
 
@@ -45,32 +58,22 @@ public class PlayerController : MonoBehaviour
                 case EnemyController.EnemyType.Mushnub:
                     Debug.Log("Mushnub과 충돌 → ScaleUp");
                     ScaleUp(0.002f);
+                    animatorController?.PlayShout();
                     Destroy(other.gameObject);
                     break;
 
                 case EnemyController.EnemyType.GreenBlob:
-                    Debug.Log("GreenBlob과 충돌");
-                    if (scale >= 0.03f)
-                    {
-                        ScaleUp(0.002f);
-                        Destroy(other.gameObject);
-                    }
-                    else
-                    {
-                        PlayerLife.Instance.TakeDamage();
-                    }
-                    break;
-
                 case EnemyController.EnemyType.AlienBlob:
-                    Debug.Log("AlienBlob과 충돌");
-                    if (scale >= 0.06f)
+                    if (scale >= (enemy.enemyType == EnemyController.EnemyType.GreenBlob ? 0.03f : 0.06f))
                     {
                         ScaleUp(0.002f);
                         Destroy(other.gameObject);
+                        animatorController?.PlayShout(); // 적 처치 시
                     }
                     else
                     {
                         PlayerLife.Instance.TakeDamage();
+                        // 피격 애니메이션은 PlayerLife에서 실행
                     }
                     break;
 
@@ -86,8 +89,8 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
-                if (bossKillCount >= 2)
-                    GameManager.Instance.GameClear();
+                animatorController?.PlayShout(); // 보스 처치 시
+                if (bossKillCount >= 2) {GameManager.Instance.GameClear();}
             }
             else
                 GameManager.Instance.GameOver();

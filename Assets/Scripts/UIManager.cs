@@ -114,8 +114,10 @@ public class UIManager : MonoBehaviour
     // Call if Plane detected, and Room created
     public void StartGame()
     {
-        if (SceneManager.sceneCount == 1)
+        if (SceneManager.sceneCount == 1){
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonSFX);
             SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        }
         else return;
 
         SetUI("Stage1");

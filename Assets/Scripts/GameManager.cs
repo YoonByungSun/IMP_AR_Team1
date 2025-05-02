@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public bool isGameOver = false;
-    public bool isGameClear = false;
+    public static bool isGameOver = false;
+    public static bool isGameClear = false;
 
     private void Awake()
     {

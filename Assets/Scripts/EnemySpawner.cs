@@ -87,6 +87,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemies(int minSpawn = 1, int maxSpawn = 3)
     {
+        if (GameManager.isGameOver) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
         if (!spawned) return;
 
@@ -116,6 +117,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnBosses()
     {
+        if (GameManager.isGameOver) return;
         if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 

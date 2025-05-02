@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+using System.Collections;
 
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
-    public static float fixedPlayerY = 0.3f; // 💡 enemy들도 이 Y값 참조
+    public static float fixedPlayerY = 0.3f;
     public bool isSpawned = false;
 
     private GameObject spawnedPlayer;
@@ -29,51 +30,75 @@ public class PlayerSpawner : MonoBehaviour
             trackedImageManager.trackedImagesChanged -= OnTrackedImagesChanged;
     }
 
-    private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
+    void Start()
     {
-        foreach (var addedImage in eventArgs.added)
+        StartCoroutine(CheckTrackedImages());
+    }
+
+    IEnumerator CheckTrackedImages()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        GameObject room = RoomSpawner.Instance.GetRoom();
+        if (room == null) yield break;
+
+        foreach (var image in trackedImageManager.trackables)
         {
-            GameObject room = RoomSpawner.Instance.GetRoom();
-            if (spawnedPlayer == null && room != null)
+            if (image.trackingState == TrackingState.Tracking && spawnedPlayer == null)
             {
-                trackedImage = addedImage;
-
-                Vector3 markerPos = trackedImage.transform.position;
-
-                float yOffset = 0.05f;
-                float baseY = markerPos.y;
-
-                if (room != null)
-                {
-                    baseY = room.transform.position.y + (room.transform.localScale.y * 0.5f) + yOffset;
-                }
-
-                fixedPlayerY = baseY;
-                Vector3 spawnPos = new Vector3(markerPos.x, fixedPlayerY, markerPos.z);
-
-                spawnedPlayer = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
-
-                float scale = 0.015f;
-                spawnedPlayer.transform.localScale = new Vector3(scale, scale, scale);
-                spawnedPlayer.tag = "Player";
-                spawnedPlayer.transform.parent = new GameObject("Player").transform;
-                PlayerController.scale = scale;
-
-                Debug.Log("Player Spawned at " + spawnPos);
-                isSpawned = true;
+                SpawnPlayer(image, room);
+                break;
             }
         }
+    }
 
-        foreach (var updatedImage in eventArgs.updated)
+    private void OnTrackedImagesChanged(ARTrackedImagesChangedEventArgs eventArgs)
+    {
+        if (GameManager.isGameOver) return;
+
+        GameObject room = RoomSpawner.Instance.GetRoom();
+        if (room == null) return;
+
+        foreach (var image in eventArgs.added)
         {
-            if (trackedImage == updatedImage && spawnedPlayer != null)
-            {
-                Vector3 markerPos = updatedImage.transform.position;
+            if (spawnedPlayer == null && image.trackingState == TrackingState.Tracking)
+                SpawnPlayer(image, room);
+        }
 
-                // ✅ XZ는 마커 따라가고, Y는 고정된 값 유지
+        foreach (var image in eventArgs.updated)
+        {
+            if (spawnedPlayer == null && image.trackingState == TrackingState.Tracking)
+                SpawnPlayer(image, room);
+
+            if (trackedImage == image && spawnedPlayer != null)
+            {
+                Vector3 markerPos = image.transform.position;
                 Vector3 newPos = new Vector3(markerPos.x, fixedPlayerY, markerPos.z);
                 spawnedPlayer.transform.position = newPos;
             }
         }
+    }
+
+    private void SpawnPlayer(ARTrackedImage image, GameObject room)
+    {
+        trackedImage = image;
+
+        Vector3 markerPos = image.transform.position;
+        float yOffset = 0.05f;
+        float baseY = room.transform.position.y + (room.transform.localScale.y * 0.5f) + yOffset;
+
+        fixedPlayerY = baseY;
+        Vector3 spawnPos = new Vector3(markerPos.x, fixedPlayerY, markerPos.z);
+
+        spawnedPlayer = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
+
+        float scale = 0.015f;
+        spawnedPlayer.transform.localScale = new Vector3(scale, scale, scale);
+        spawnedPlayer.tag = "Player";
+        spawnedPlayer.transform.parent = new GameObject("Player").transform;
+        PlayerController.scale = scale;
+
+        Debug.Log("Player Spawned at " + spawnPos);
+        isSpawned = true;
     }
 }

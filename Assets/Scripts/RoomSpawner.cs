@@ -51,8 +51,6 @@ public class RoomSpawner : MonoBehaviour
                         room = Instantiate(roomPrefab, anchor.transform);
                         room.transform.localPosition = Vector3.zero;
                         room.transform.localRotation = Quaternion.identity;
-
-                        DontDestroyOnLoad(room);
                         isSpawned = true;
 
                         Debug.Log("Room Spawned with Anchor at " + hitPose.position);

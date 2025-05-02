@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.isGameOver) return;
+        if (GameManager.isGameOver) return;
 
         transform.position += moveDirection * speed * Time.deltaTime;
         if (moveDirection != Vector3.zero)

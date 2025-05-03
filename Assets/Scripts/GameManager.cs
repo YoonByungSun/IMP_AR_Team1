@@ -7,8 +7,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    public bool isGameOver = false;
-    public bool isGameClear = false;
+    public static bool isGameOver = false;
+    public static bool isGameClear = false;
+
+    private PlayerAnimator animator;
 
     private void Awake()
     {
@@ -20,7 +22,7 @@ public class GameManager : MonoBehaviour
     {
         if (isGameClear) return;
         isGameClear = true;
-        Debug.Log("Game Clear!");
+        animator?.PlayCheer();
         UIManager.Instance.SetUI("clear");
     }
 
@@ -28,7 +30,7 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver) return;
         isGameOver = true;
-        Debug.Log("Game Over");
         UIManager.Instance.SetUI("over");
     }
+
 }

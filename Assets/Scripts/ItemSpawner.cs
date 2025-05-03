@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-// Function: Randomly Spawn Items over the Room
 public class ItemSpawner : MonoBehaviour
 {
     public GameObject[] itemPrefabs;
@@ -14,10 +13,10 @@ public class ItemSpawner : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(startSpawn());
+        StartCoroutine(StartSpawn());
     }
 
-    IEnumerator startSpawn()
+    IEnumerator StartSpawn()
     {
         while (roomTransform == null)
         {
@@ -33,13 +32,12 @@ public class ItemSpawner : MonoBehaviour
 
     IEnumerator SpawnItems()
     {
-        // Only Spawn over the Room Object
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) yield break;
 
         Bounds bounds = roomCollider.bounds;
         Vector3 roomMin = bounds.min;
         Vector3 roomMax = bounds.max;
-        float yPos = 0.1f;
+        float yPos = PlayerSpawner.fixedPlayerY;
 
         int spawned = 0;
 
@@ -48,7 +46,6 @@ public class ItemSpawner : MonoBehaviour
             float delay = Random.Range(minDelay, maxDelay);
             yield return new WaitForSeconds(delay);
 
-            // 생성 여부 결정
             if (Random.value <= spawnRate)
             {
                 Vector3 spawnPos = new Vector3(

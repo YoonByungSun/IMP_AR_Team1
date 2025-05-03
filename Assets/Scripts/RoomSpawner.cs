@@ -6,17 +6,23 @@ using System.Collections.Generic;
 // Function: Spawn Room
 public class RoomSpawner : MonoBehaviour
 {
+    public static RoomSpawner Instance;
+
     public GameObject roomPrefab;
+    public bool isSpawned = false;
 
     private ARRaycastManager raycastManager;
     private ARPlaneManager planeManager;
     private ARAnchorManager anchorManager;
+    private GameObject room;
 
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
-    private bool hasSpawned = false;
 
     void Awake()
     {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
         raycastManager = GetComponent<ARRaycastManager>();
         planeManager = GetComponent<ARPlaneManager>();
         anchorManager = GetComponent<ARAnchorManager>();
@@ -24,7 +30,7 @@ public class RoomSpawner : MonoBehaviour
 
     void Update()
     {
-        if (hasSpawned || Input.touchCount == 0)
+        if (isSpawned || Input.touchCount == 0)
             return;
 
         Touch touch = Input.GetTouch(0);
@@ -40,23 +46,58 @@ public class RoomSpawner : MonoBehaviour
                 if (hitPlane != null)
                 {
                     ARAnchor anchor = anchorManager.AttachAnchor(hitPlane, hitPose);
-                    if (anchor != null)
+                    if (anchor != null && !UIManager.Instance.IsOverUI(touch.position))
                     {
-                        GameObject room = Instantiate(roomPrefab, anchor.transform);
+                        room = Instantiate(roomPrefab, anchor.transform);
                         room.transform.localPosition = Vector3.zero;
                         room.transform.localRotation = Quaternion.identity;
+                        isSpawned = true;
 
-                        DontDestroyOnLoad(room);
-                        hasSpawned = true;
+                        Debug.Log("Room Spawned with Anchor at " + hitPose.position);
 
-                        Debug.Log("✅ Room Spawned with Anchor at " + hitPose.position);
+                        foreach (ARPlane plane in planeManager.trackables)
+                            DisableVisualizer(plane);
                     }
-                    else
-                    {
-                        Debug.LogWarning("❌ Anchor 생성 실패");
-                    }
+                    else Debug.LogWarning("Anchor spawn failed.");
                 }
             }
         }
+    }
+    void OnEnable()
+    {
+        if (planeManager != null)
+            planeManager.planesChanged += OnPlanesChanged;
+    }
+
+    void OnDisable()
+    {
+        if (planeManager != null)
+            planeManager.planesChanged -= OnPlanesChanged;
+    }
+
+    private void OnPlanesChanged(ARPlanesChangedEventArgs args)
+    {
+        if (!isSpawned) return;
+
+        foreach (ARPlane plane in args.added)
+            DisableVisualizer(plane);
+    }
+
+    private void DisableVisualizer(ARPlane plane)
+    {
+        plane.GetComponent<MeshRenderer>().enabled = false;
+        plane.GetComponent<ARPlaneMeshVisualizer>().enabled = false;
+    }
+
+    public int GetPlaneCount()
+    {
+        if (planeManager == null) return 0;
+        return planeManager.trackables.count;
+    }
+
+    public GameObject GetRoom()
+    {
+        if (!isSpawned) Debug.LogError("Room not created yet.");
+        return room;
     }
 }

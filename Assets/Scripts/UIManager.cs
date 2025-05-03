@@ -1,5 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,8 +15,12 @@ public class UIManager : MonoBehaviour
     public GameObject clearUI;
     public GameObject homeUI;
 
+    [Header("Check Ready")]
+    public GameObject waitForPlane;
+    public GameObject touchToStart;
+    public GameObject waitForPlayer;
+
     [Header("Buttons")]
-    public GameObject retryButton;
     public GameObject exitButton_GameOver;
     public GameObject homeButton;
     public GameObject exitButton_Clear;
@@ -32,11 +38,10 @@ public class UIManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    // Init UI
     void Start()
     {
         SetUI("home");
-        if (retryButton != null)
-            retryButton.GetComponent<Button>().onClick.AddListener(OnRetryClicked);
         if (exitButton_GameOver != null)
             exitButton_GameOver.GetComponent<Button>().onClick.AddListener(OnExitClicked);
         if (homeButton != null)
@@ -45,21 +50,76 @@ public class UIManager : MonoBehaviour
             exitButton_Clear.GetComponent<Button>().onClick.AddListener(OnExitClicked);
     }
 
-    public void StartGame()
+    // Check if AR Plane detected, Room Object created and Player Object Spawned
+    // if all of them are true, call StartGame()
+    public void ReadyGame()
     {
+        GameManager.isGameOver = false;
         Time.timeScale = 1f;
         SetUI("inGame");
-        SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        SetUI("ready");
+
+        StartCoroutine(CheckPlane());
+    }
+
+    private IEnumerator CheckPlane()
+    {
+        while (true)
+        {
+            bool planeReady = RoomSpawner.Instance.GetPlaneCount() > 0;
+            bool roomReady = RoomSpawner.Instance.isSpawned;
+
+            if (!planeReady) // Waiting for Plane Detection...
+            {
+                waitForPlane.SetActive(true);
+                touchToStart.SetActive(false);
+            }
+            else if (!roomReady) // Touch Any Plane to Get Ready
+            {
+                waitForPlane.SetActive(false);
+                touchToStart.SetActive(true);
+            }
+            else // Start Game
+            {
+                waitForPlane.SetActive(false);
+                touchToStart.SetActive(false);
+                StartCoroutine(CheckPlayer());
+                yield break;
+            }
+
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    private IEnumerator CheckPlayer()
+    {
+        while (true)
+        {
+            bool playerReady = GameObject.Find("Player") != null;
+            if (!playerReady)
+                waitForPlayer.SetActive(true);
+            else
+            {
+                waitForPlayer.SetActive(false);
+                StartGame();
+                yield break;
+            }
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    // Call if Plane detected, Room Created and Player Spawned
+    public void StartGame()
+    {
+        if (SceneManager.sceneCount == 1)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonSFX);
+            SceneManager.LoadScene("Stage1", LoadSceneMode.Additive);
+        }
+        else return;
+
         SetUI("Stage1");
     }
-
-    public void OnRetryClicked()
-    {
-        Time.timeScale = 1f;
-        StartCoroutine(RetryGame());
-        StartGame();
-    }
-
 
     public void OnHomeClicked()
     {
@@ -76,7 +136,7 @@ public class UIManager : MonoBehaviour
         }
         
         SetUI("home");
-        SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
     }
 
     public void OnExitClicked()
@@ -86,19 +146,6 @@ public class UIManager : MonoBehaviour
 #else
     Application.Quit();
 #endif
-    }
-
-    private IEnumerator RetryGame()
-    {
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-            if (scene.name.StartsWith("Stage"))
-            {
-                yield return SceneManager.UnloadSceneAsync(scene);
-            }
-        }
-        yield return SceneManager.LoadSceneAsync("UI", LoadSceneMode.Single);
     }
 
     public void SetUI(string name)
@@ -153,9 +200,33 @@ public class UIManager : MonoBehaviour
                 stage3Text.color = a;
                 stage3Text.fontSize = 55;
                 break;
+            case "ready":
+                stage1Text.color = b;
+                stage1Text.fontSize = 40;
+                stage2Text.color = b;
+                stage2Text.fontSize = 40;
+                stage3Text.color = b;
+                stage3Text.fontSize = 40;
+                break;
             default:
                 Debug.LogError("No UI");
                 return;
         }
+    }
+
+    public bool IsOverUI(Vector2 pos)
+    {
+        if (homeUI.active)
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = new Vector2(pos.x, pos.y);
+
+            // make a raycast from the pos to check if the raycast hits any UI elements
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+
+            return results.Count > 0;
+        }
+        return false;
     }
 }

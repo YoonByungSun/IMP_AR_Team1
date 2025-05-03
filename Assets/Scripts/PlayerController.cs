@@ -1,81 +1,62 @@
-﻿using NUnit.Framework;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public float scale = 1f;
-
-    public GameObject fkillerEffect;
-    public GameObject gameOverUI;  // GameOver UI 오브젝트 연결용
+    public static float scale;
 
     private int bossKillCount = 0;
+    private PlayerAnimator animator;
 
     void Start()
     {
-        string currentScene = SceneManager.GetActiveScene().name;
+        animator = GetComponent<PlayerAnimator>();
+        StartCoroutine(FlyRoutine());
+    }
 
-        // Stage1이 아닐 때만 저장된 스케일 적용
-        if (currentScene != "Stage1" && PlayerData.Instance != null)
+     IEnumerator FlyRoutine()
+    {
+        while (true)
         {
-            scale = PlayerData.Instance.savedScale;
-            transform.localScale = new Vector3(scale, scale, scale);
-            Debug.Log($"savedScale 적용됨 = {scale}");
+            yield return new WaitForSeconds(4f);
+            animator?.PlayFly();
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"[충돌 발생] other.name = {other.name}, tag = {other.tag}");
-
         if (other.CompareTag("Enemy"))
         {
             EnemyController enemy = other.GetComponent<EnemyController>();
-            if (enemy == null)
-            {
-                Debug.LogWarning("Enemy 태그인데 EnemyController가 없음");
-                return;
-            }
-
-            Debug.Log($"[EnemyController 확인] enemyType = {enemy.enemyType}");
 
             switch (enemy.enemyType)
             {
                 case EnemyController.EnemyType.Mushnub:
-                    Debug.Log("Mushnub과 충돌 → ScaleUp");
                     ScaleUp(0.002f);
                     Destroy(other.gameObject);
+                    animator?.PlayShout();
                     break;
-
                 case EnemyController.EnemyType.GreenBlob:
-                    Debug.Log("GreenBlob과 충돌");
                     if (scale >= 0.03f)
                     {
                         ScaleUp(0.002f);
                         Destroy(other.gameObject);
+                        animator?.PlayShout();
                     }
-                    else
-                    {
-                        PlayerLife.Instance.TakeDamage();
-                    }
+                    else PlayerLife.Instance.TakeDamage();
                     break;
-
                 case EnemyController.EnemyType.AlienBlob:
-                    Debug.Log("AlienBlob과 충돌");
                     if (scale >= 0.06f)
                     {
                         ScaleUp(0.002f);
                         Destroy(other.gameObject);
+                        animator?.PlayShout();
                     }
-                    else
-                    {
-                        PlayerLife.Instance.TakeDamage();
-                    }
+                    else PlayerLife.Instance.TakeDamage();
                     break;
-
                 default:
-                    Debug.LogError("알 수 없는 enemyType");
+                    Debug.LogError("Unknown Enemy Type");
                     break;
             }
         }
@@ -86,27 +67,20 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 bossKillCount++;
-                if (bossKillCount >= 2)
-                    GameManager.Instance.GameClear();
+                animator?.PlayShout();
+                if (bossKillCount >= 2) GameManager.Instance.GameClear();
             }
-            else
-                GameManager.Instance.GameOver();
+            else GameManager.Instance.GameOver();
         }
     }
 
     void ScaleUp(float amount)
     {
-        scale = Mathf.Min(scale + amount, 1.0f);
+        scale += amount;
         transform.localScale = new Vector3(scale, scale, scale);
-        transform.position = new Vector3(transform.position.x, 0.1f, transform.position.z);
+        AudioManager.Instance.PlaySFX(AudioManager.Instance.growSFX);
 
-        if (PlayerData.Instance != null)
-        {
-            PlayerData.Instance.savedScale = scale;
-            Debug.Log($"스케일 저장됨: {scale}");
-        }
-
-        // 스테이지 전환 조건 체크 및 처리
+        // Change Stage if Scale Value is enough
         if (scale >= 0.03f && IsSceneLoaded("Stage1"))
         {
             StartCoroutine(SwitchStage("Stage1", "Stage2"));
@@ -119,22 +93,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    //void GameOver()
-    //{
-    //    if (isDead) return;
-    //    isDead = true;
-
-    //    if (gameOverUI != null)
-    //    {
-    //        gameOverUI.SetActive(true);
-    //        Time.timeScale = 0f;  // 게임 일시정지
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("gameOverUI가 연결되지 않았습니다.");
-    //    }
-    //}
     private bool IsSceneLoaded(string sceneName)
     {
         for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -147,36 +105,11 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator SwitchStage(string prevScene, string nextScene)
     {
-        // 이전 스테이지 언로드
         if (IsSceneLoaded(prevScene))
-        {
-            Debug.Log($"[Stage 전환] {prevScene} 언로드");
             yield return SceneManager.UnloadSceneAsync(prevScene);
-        }
-
-        // 다음 스테이지 로드
         if (!IsSceneLoaded(nextScene))
-        {
-            Debug.Log($"[Stage 전환] {nextScene} 로드");
             yield return SceneManager.LoadSceneAsync(nextScene, LoadSceneMode.Additive);
-        }
     }
-
-
-    //public void ActivateFkiller()
-    //{
-    //    isFkillerActive = true;
-    //    if (fkillerEffect != null)
-    //        fkillerEffect.SetActive(true);
-    //    Invoke("DeactivateFkiller", 5f);
-    //}
-
-    //void DeactivateFkiller()
-    //{
-    //    isFkillerActive = false;
-    //    if (fkillerEffect != null)
-    //        fkillerEffect.SetActive(false);
-    //}
 }
 
 

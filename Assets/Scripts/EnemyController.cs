@@ -12,7 +12,7 @@ public class EnemyController : MonoBehaviour
         Vector3 direction = playerPosition - transform.position;
         direction.y = 0;
         moveDirection = direction.normalized;
-        speed = Random.Range(0.5f, 2.0f);
+        speed = Random.Range(0.01f, 0.1f);
     }
 
     void Update()

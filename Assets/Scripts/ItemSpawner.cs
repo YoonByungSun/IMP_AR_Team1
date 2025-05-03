@@ -27,10 +27,10 @@ public class ItemSpawner : MonoBehaviour
             yield return null;
         }
 
-        StartCoroutine(SpawnItems());
+        StartCoroutine(SpawnItem());
     }
 
-    IEnumerator SpawnItems()
+    IEnumerator SpawnItem()
     {
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) yield break;
 

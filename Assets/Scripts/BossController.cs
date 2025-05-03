@@ -9,5 +9,6 @@ public class BossController : MonoBehaviour
     {
         if (GameManager.isGameOver || GameManager.isGameClear) return;
         transform.position = Vector3.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+        transform.LookAt(GameObject.FindWithTag("Player").transform);
     }
 }

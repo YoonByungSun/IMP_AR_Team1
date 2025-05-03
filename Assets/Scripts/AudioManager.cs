@@ -35,7 +35,6 @@ public class AudioManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 씬 이름에 따라 BGM 교체
         switch (scene.name)
         {
             case "Stage1":

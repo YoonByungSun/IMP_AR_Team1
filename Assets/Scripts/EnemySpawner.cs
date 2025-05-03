@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,12 +15,12 @@ public class EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        StartCoroutine(SpawnReady());
         if (!GameObject.Find("Enemy"))
             spawned = new GameObject("Enemy");
     }
 
-    IEnumerator SpawnRoutine()
+    IEnumerator SpawnReady()
     {
         while (player == null)
         {
@@ -36,22 +37,30 @@ public class EnemySpawner : MonoBehaviour
             yield return null;
         }
 
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene.name == "Stage1" || scene.name == "Stage2" || scene.name == "Stage3")
+            {
+                SceneManager.SetActiveScene(scene);
+                SceneManager.MoveGameObjectToScene(spawned, scene);
+                break;
+            }
+        }
+
         if (IsSceneLoaded("Stage1") || IsSceneLoaded("Stage2"))
         {
-            StartCoroutine(CheckScale());
+            StartCoroutine(SpawnRoutine());
         }
         else if (IsSceneLoaded("Stage3"))
         {
-            StartCoroutine(CheckScale());
+            StartCoroutine(SpawnRoutine());
             SpawnBoss();
         }
     }
 
-
-    IEnumerator CheckScale()
+    IEnumerator SpawnRoutine()
     {
-        string currentScene = SceneManager.GetActiveScene().name;
-
         while (true)
         {
             float scale = PlayerController.scale;
@@ -70,7 +79,6 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnEnemy(int minSpawn = 1, int maxSpawn = 3)
     {
-        if (GameManager.isGameOver || GameManager.isGameClear) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
         if (!spawned) return;
 
@@ -90,6 +98,7 @@ public class EnemySpawner : MonoBehaviour
 
             int randomIndex = Random.Range(0, enemyPrefabs.Length);
             GameObject enemy = Instantiate(enemyPrefabs[randomIndex], spawnPos, Quaternion.identity);
+            enemy.transform.parent = spawned.transform;
 
             if (enemy.TryGetComponent(out EnemyController ec) && player != null)
             {
@@ -100,7 +109,6 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnBoss()
     {
-        if (GameManager.isGameOver || GameManager.isGameClear) return;
         if (player == null || roomTransform == null) return;
         if (!roomTransform.TryGetComponent(out Collider roomCollider)) return;
 
@@ -118,11 +126,10 @@ public class EnemySpawner : MonoBehaviour
             );
 
             GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+            boss.transform.parent = spawned.transform;
 
             if (boss.TryGetComponent(out BossController bc) && player != null)
-            {
                 bc.player = player;
-            }
         }
     }
 
@@ -137,4 +144,3 @@ public class EnemySpawner : MonoBehaviour
     }
 
 }
-

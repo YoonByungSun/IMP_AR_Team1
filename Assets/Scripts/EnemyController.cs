@@ -7,12 +7,12 @@ public class EnemyController : MonoBehaviour
     public float speed;
     private Vector3 moveDirection;
 
-    public void InitDir(Vector3 playerPosition)
+    public void InitDir(Vector3 playerPos)
     {
-        Vector3 direction = playerPosition - transform.position;
+        Vector3 direction = playerPos - transform.position;
         direction.y = 0;
         moveDirection = direction.normalized;
-        speed = Random.Range(0.5f, 2.0f);
+        speed = Random.Range(0.02f, 0.2f);
     }
 
     void Update()
@@ -22,5 +22,9 @@ public class EnemyController : MonoBehaviour
         transform.position += moveDirection * speed * Time.deltaTime;
         if (moveDirection != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(moveDirection);
+
+        Vector3 playerPos = GameObject.FindWithTag("Player").transform.position;
+        if (Vector3.Distance(transform.position, playerPos) > 5.0f)
+            Destroy(gameObject);
     }
 }

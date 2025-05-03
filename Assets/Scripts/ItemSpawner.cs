@@ -9,10 +9,14 @@ public class ItemSpawner : MonoBehaviour
     public int maxCount = 5;
     public float minDelay = 1f;
     public float maxDelay = 5f;
-    public float spawnRate = 0.5f; // 0~1 사이의 확률
+    public float spawnRate = 0.5f;
+
+    private GameObject spawnedItem;
 
     void Start()
     {
+        if (GameObject.Find("Item") == null)
+            spawnedItem = new GameObject("Item");
         StartCoroutine(StartSpawn());
     }
 
@@ -55,7 +59,9 @@ public class ItemSpawner : MonoBehaviour
                 );
 
                 int randomIndex = Random.Range(0, itemPrefabs.Length);
-                Instantiate(itemPrefabs[randomIndex], spawnPos, Quaternion.identity);
+                GameObject item = Instantiate(itemPrefabs[randomIndex], spawnPos, Quaternion.identity);
+                item.transform.parent = spawnedItem.transform;
+
                 spawned++;
             }
         }

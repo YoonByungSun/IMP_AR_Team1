@@ -3,7 +3,7 @@
 
 1. [About the Game](#1-about-the-game)  
 2. [Architecture](#2-architecture)
-3. [In Game Screenshots](#3-in-game)
+3. [In Game Screenshots](#3-in-game-screenshots)
 4. [Assets](#4-assets)
 ---
 
